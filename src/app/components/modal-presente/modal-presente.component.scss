@@ -1,0 +1,17 @@
+.modal-size {
+  width: 90vw;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.card-text {
+  text-align: center;
+}
+
+/* Se quiser um comportamento ainda mais suave, use clamp(): */
+/*
+.custom-dialog-size {
+  width: clamp(320px, 80vw, 620px);
+  margin: 0 auto;
+}
+*/

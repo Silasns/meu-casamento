@@ -1,0 +1,149 @@
+/* === layout principal === */
+.container-pay {
+  display: flex;
+  justify-content: center;
+  padding: 0 3vw; /* espaçamento lateral igual em vw */
+  margin-top: 3rem;
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  max-width: 90vw;
+  width: 100%;
+}
+
+.payment-card {
+  flex: 1 1 55vw; /* largura baseada em viewport, mais largo */
+  min-width: 45vw;
+}
+
+.summary-card {
+  flex: 0 0 24vw;
+  max-width: 24vw;
+  min-width: 20vw;
+}
+
+/* === customizações de método (mantidas do seu original) === */
+.method-card {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  transition: opacity 0.2s, border-color 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  nb-radio {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    margin-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .method-info {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 0.75rem;
+  }
+}
+
+.method-card.selected {
+  opacity: 1;
+  border-color: var(--nb-theme-color-primary, #3366ff);
+}
+
+/* esconder o ícone de chevron default se for o caso */
+::ng-deep nb-accordion-item-header nb-icon[icon="chevron-down-outline"] {
+  display: none !important;
+}
+
+::ng-deep .custom-toggle-icon {
+  margin-left: auto;
+}
+
+::ng-deep .custom-toggle-icon-2 {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+}
+
+/* alerta */
+.alert-logo {
+  width: 24px;
+  height: auto;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  flex-direction: row !important;
+}
+
+/* permite clique apenas onde interessa */
+::ng-deep nb-accordion-item-header {
+  pointer-events: none !important;
+}
+::ng-deep nb-accordion-item-header nb-radio {
+  pointer-events: auto !important;
+}
+
+/* === MOBILE: resumo lateral some e footer aparece fixo embaixo === */
+.mobile-footer {
+  display: none; /* padrão desktop escondido */
+}
+
+@media (max-width: 1024px) {
+  .summary-card {
+    display: none; /* some em mobile */
+  }
+
+  .payment-card {
+    flex: 1 1 100%;
+  }
+
+  /* === INÍCIO: footer fixo embaixo para mobile === */
+  .mobile-footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+
+  .mobile-footer .summary-info {
+    flex: 1;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.9rem;
+    min-width: 0;
+  }
+
+  .btn-continue-mobile {
+    flex: 0 0 auto;
+    min-width: 140px;
+    font-weight: 600;
+  }
+
+  /* garante que conteúdo não fique escondido atrás do footer fixo */
+  :host ::ng-deep .container-pay {
+    padding-bottom: 70px; /* valor correspondente à altura do footer */
+  }
+  /* === FIM: footer móvel === */
+}

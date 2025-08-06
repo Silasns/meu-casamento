@@ -1,0 +1,54 @@
+/* conclusao.component.scss */
+.conclusion-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 1rem;
+  background: #f0f2f5;
+}
+
+.conclusion-card {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  padding: 2rem;
+
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+}
+
+/* conclusao.component.scss */
+:host {
+  display: grid;
+  place-items: center;    /* alinha horizontal e vertical */
+  height: 100vh;          /* ocupa toda a altura da janela */
+  margin: 0;
+  background: #f0f2f5;
+}
+
+.conclusion-card {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;     /* texto centralizado */
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #555;
+  margin-bottom: 2rem;
+}

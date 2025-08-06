@@ -1,0 +1,19 @@
+
+<nb-card>
+<nb-card-header class="card-text">{{ product.titulo }}</nb-card-header>
+<nb-card-body>
+    <div class="row">
+        <img 
+        class="present-image"
+        src= "{{ product.imageUrl }}" 
+        alt= "{{ product.imageAlt }}">
+    </div>
+    <div class="row card-text">
+        <p>{{ product.descricao }}</p>
+    </div>
+</nb-card-body>
+    <nb-card-footer>
+        <button (click)="openModal()" nbButton hero status="primary" class="w-100">
+            <nb-icon icon="checkmark-outline"></nb-icon>Reservar</button>
+    </nb-card-footer>
+</nb-card>

@@ -1,0 +1,21 @@
+.present-image {
+  width: 100%;          // defina a largura fixa que quiser
+  height: auto; 
+  max-width: 200px;        // defina também a altura fixa
+  object-fit: contain;   // ajusta para caber inteiro, sem cortar
+  display: block;
+  margin: 0 auto;  // opcional: centraliza ou posiciona como quiser
+}
+
+:host {                  /* :host representa o <app-card-presente> */
+  display: block;
+  width: 100%;
+}
+
+nb-card {
+  width: 100%;
+}
+
+.card-text {
+  text-align: center;
+}

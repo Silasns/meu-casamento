@@ -1,0 +1,32 @@
+/* 1) torne o <nb-card.modal-size> um flex-column de altura limitada */
+nb-dialog-container nb-card.modal-size {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 95vh;       /* até 80% da altura da viewport */
+  max-height: 95vh;   /* nunca ultrapassa esse valor */
+  width: 90vw;        /* responsivo */
+  max-width: 620px;   /* nunca maior que 620px */
+  margin: 0 auto;     /* centraliza horizontalmente */
+
+    /* habilita o scroll interno */
+  overflow-y: auto !important;
+
+  /* para iOS e webkit: scroll com “momentum” */
+  -webkit-overflow-scrolling: touch;
+
+  /* garante que o gesto pan-y seja direcionado a este container */
+  touch-action: pan-y;
+}
+
+/* 2) faça apenas o corpo rolar */
+nb-dialog-container nb-card.modal-size nb-card-body {
+  flex: 1 1 auto;     /* expande para preencher todo o espaço */
+  overflow-y: auto;   /* ativa a barra de rolagem interna */
+  padding-right: .5rem; /* para o scroll não cortar o conteúdo */
+}
+
+/* 3) mantenha header e footer fixos */
+nb-dialog-container nb-card.modal-size nb-card-header,
+nb-dialog-container nb-card.modal-size nb-card-footer {
+  flex-shrink: 0;
+}

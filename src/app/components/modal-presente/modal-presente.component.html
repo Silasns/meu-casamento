@@ -1,0 +1,28 @@
+<!-- form-dialog.component.html -->
+<nb-card class="modal-size">
+    <nb-card-header class="card-text">
+        <h3>Você tem certeza?</h3>
+        <p>Você está prestes a reservar este presente:</p>
+        <p>Cafeiteira</p>
+    </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Nome</label>
+        <input class="mt-2" nbInput fullWidth formControlName="nome" fieldSize="small" placeholder="Digite seu nome"/>
+      </div>
+      <div class="form-group mt-4">
+        <label>E‑mail</label>
+        <input class="mt-2" nbInput fullWidth formControlName="email" fieldSize="small" placeholder="Digite seu e-mail"/>
+      </div>
+      <div class="form-group mt-4 mb-2">
+        <label>Mensagem para o casal</label>
+        <textarea class="mt-2" nbInput fullWidth formControlName="mensagem" placeholder="Deixe uma mensagem para o casal ..." ></textarea>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-center gap-2 ">
+    <button nbButton status="danger" (click)="cancel()">Cancelar</button>
+    <button nbButton status="primary" [disabled]="!form.valid" (click)="submit()">Reservar</button>
+  </nb-card-footer>
+</nb-card>
