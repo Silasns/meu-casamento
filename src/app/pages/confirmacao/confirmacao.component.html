@@ -104,14 +104,19 @@
         <h4 class="mb-3">Resumo</h4>
 
         <div class="mb-3">
-          <div><strong>Produto:</strong> Nome do produto/serviço</div>
-          <div><strong>Descrição:</strong> Breve descrição ou variação</div>
+          <div><strong>Produto:</strong> {{ productValue?.titulo }}</div>
+          <div><strong>Descrição:</strong> {{ productValue?.descricao }}</div>
         </div>
 
         <div class="mb-3" style="font-size: 0.9rem;">
           <div class="d-flex justify-content-between">
-            <span>Valor do Produto:</span>
+            <span>Valor do Médio do Produto:</span>
+            <!--
+               TODO
+                Mudar o valor do produto para number do tipo inteiro, atualmente esta strign
+            -->
             <span>R$ {{ valorProdutos | number:'1.2-2' }}</span>
+            <span>R$ {{ productValue?.valor }}</span>
           </div>
           <hr />
         </div>
