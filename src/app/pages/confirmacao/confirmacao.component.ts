@@ -9,6 +9,7 @@ import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { ProductStorageService } from '../../services/product-storage.service';
 import { filter, Observable, take } from 'rxjs';
 import { UserModel } from '../../models/user.model';
+import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-confirmacao',
@@ -42,7 +43,8 @@ export class ConfirmacaoComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private paymentFlow: PaymentFlowService,
-    private storagePayment: ProductStorageService
+    private storagePayment: ProductStorageService,
+    private productsService: ProductsService
   ) {
     this.product$ = this.storagePayment.product$;
     this.userInfo$ = this.storagePayment.userInfo$;
@@ -100,12 +102,33 @@ export class ConfirmacaoComponent implements OnInit {
     if (this.method === "card") {
       this.montarLinkPagamento();
     }
-    this.router.navigate(['/conclusao']);
+    //this.router.navigate(['/conclusao']);
   }
 
   montarLinkPagamento(){
-    const linkPagamento = `https://checkout.infinitepay.io/silas-nc?items=[{"name":"${this.productValue?.titulo}","price":${this.productValue?.valor},"quantity":1}]&order_nsu=${this.productValue?.id}&redirect_url=https://silascardoso.com.br/&customer_name=${this.userValue?.nome}&customer_email=${this.userValue?.email}&customer_cellphone=${this.userValue?.telefone}`;
-    this.goToPaymentNewTab(linkPagamento);
+    let linkPagamento2: string =''
+    const request = {
+        "handle": "silas-nc",
+        "redirect_url": "https://silascardoso.com.br/",
+        "order_nsu": "123456",
+        "items": [
+          {
+            "quantity": 1,
+            "price": 1000,
+            "description": "Curso de Vendas Online"
+          },
+          {
+            "quantity": 1,
+            "price": 500,
+            "description": "Taxa de entrega"
+          }
+        ]
+      }
+    this.productsService.getLinkPagamento(request).subscribe(response => {
+      console.log("link: ", response)
+    })
+    //const linkPagamento = `https://checkout.infinitepay.io/silas-nc?items=[{"name":"${this.productValue?.titulo}","price":${this.productValue?.valor},"quantity":1}]&order_nsu=${this.productValue?.id}&redirect_url=https://silascardoso.com.br/&customer_name=${this.userValue?.nome}&customer_email=${this.userValue?.email}&customer_cellphone=${this.userValue?.telefone}`;
+    //this.goToPaymentNewTab(linkPagamento);
   }
 
   goToPaymentNewTab(url: string) {
