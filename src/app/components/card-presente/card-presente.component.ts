@@ -6,7 +6,10 @@ import { Product } from '../../models/products-response.model';
 @Component({
   selector: 'app-card-presente',
   templateUrl: './card-presente.component.html',
-  styleUrl: './card-presente.component.scss'
+  styleUrl: './card-presente.component.scss',
+  host: {
+    '[class.disabled]': 'product.statusRevervado'
+  }
 })
 export class CardPresenteComponent {
   @Input() product!: Product;

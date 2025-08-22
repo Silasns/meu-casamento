@@ -1,8 +1,7 @@
-/* === layout principal === */
 .container-pay {
   display: flex;
   justify-content: center;
-  padding: 0 3vw; /* espaçamento lateral igual em vw */
+  padding: 0 3vw;
   margin-top: 3rem;
 }
 
@@ -15,7 +14,7 @@
 }
 
 .payment-card {
-  flex: 1 1 55vw; /* largura baseada em viewport, mais largo */
+  flex: 1 1 55vw;
   min-width: 45vw;
 }
 
@@ -25,7 +24,6 @@
   min-width: 20vw;
 }
 
-/* === customizações de método (mantidas do seu original) === */
 .method-card {
   border: 1px solid #eee;
   border-radius: 4px;
@@ -63,7 +61,6 @@
   border-color: var(--nb-theme-color-primary, #3366ff);
 }
 
-/* esconder o ícone de chevron default se for o caso */
 ::ng-deep nb-accordion-item-header nb-icon[icon="chevron-down-outline"] {
   display: none !important;
 }
@@ -78,7 +75,6 @@
   margin-left: auto;
 }
 
-/* alerta */
 .alert-logo {
   width: 24px;
   height: auto;
@@ -87,7 +83,6 @@
   flex-direction: row !important;
 }
 
-/* permite clique apenas onde interessa */
 ::ng-deep nb-accordion-item-header {
   pointer-events: none !important;
 }
@@ -95,21 +90,19 @@
   pointer-events: auto !important;
 }
 
-/* === MOBILE: resumo lateral some e footer aparece fixo embaixo === */
 .mobile-footer {
-  display: none; /* padrão desktop escondido */
+  display: none;
 }
 
 @media (max-width: 1024px) {
   .summary-card {
-    display: none; /* some em mobile */
+    display: none;
   }
 
   .payment-card {
     flex: 1 1 100%;
   }
 
-  /* === INÍCIO: footer fixo embaixo para mobile === */
   .mobile-footer {
     display: flex;
     position: fixed;
@@ -141,9 +134,8 @@
     font-weight: 600;
   }
 
-  /* garante que conteúdo não fique escondido atrás do footer fixo */
   :host ::ng-deep .container-pay {
-    padding-bottom: 70px; /* valor correspondente à altura do footer */
+    padding-bottom: 70px; 
   }
-  /* === FIM: footer móvel === */
+
 }

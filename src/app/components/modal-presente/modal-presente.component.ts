@@ -24,6 +24,7 @@ export class ModalPresenteComponent {
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required]],
+      telefone: ['', []],
       email: ['', [Validators.required, Validators.email]],
       mensagem: ['', []],
     });
@@ -37,6 +38,8 @@ export class ModalPresenteComponent {
     if (this.form.valid) {
       this.dialogRef.close();
       this.paymentFlow.start();
+      this.storagePayment.setUser(this.form.value);
+      console.log("form: ", this.form.value)
       this.storagePayment.setProduct(this.product);
       this.router.navigate(['/confirmacao'])
     }
