@@ -1,14 +1,13 @@
 .present-image {
-  width: 100%;          // defina a largura fixa que quiser
+  width: 100%;       
   height: auto; 
-  max-width: 200px;        // defina também a altura fixa
-  object-fit: contain;   // ajusta para caber inteiro, sem cortar
+  max-width: 200px;       
+  object-fit: contain;   
   display: block;
-  margin: 0 auto;  // opcional: centraliza ou posiciona como quiser
+  margin: 0 auto;  
 }
 
-:host {                  /* :host representa o <app-card-presente> */
-  display: block;
+:host {                
   width: 100%;
 }
 
@@ -23,6 +22,6 @@ nb-card {
 :host(.disabled) {
   filter: grayscale(100%);
   opacity: 0.6;
-  pointer-events: none;     /* bloqueia clicks dentro do card */
+  pointer-events: none;    
   cursor: not-allowed;
 }
