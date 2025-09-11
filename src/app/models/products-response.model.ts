@@ -3,11 +3,12 @@ export interface ProcuctResposeModel {
 }
 
 export interface Product {
-    id: number,
+    id: string,
     titulo: string,
     descricao: string,
     valor: number,
     statusRevervado: boolean,
+    disponivel: boolean,
     linksLoja: LinksLoja[],
     imageUrl: string,
     imageAlt: string

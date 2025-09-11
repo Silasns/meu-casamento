@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { ModalPresenteComponent } from '../modal-presente/modal-presente.component';
 import { Product } from '../../models/products-response.model';
@@ -8,15 +8,21 @@ import { Product } from '../../models/products-response.model';
   templateUrl: './card-presente.component.html',
   styleUrl: './card-presente.component.scss',
   host: {
-    '[class.disabled]': 'product.statusRevervado'
+    '[class.disabled]': '!product.disponivel'
   }
 })
-export class CardPresenteComponent {
+export class CardPresenteComponent implements OnInit {
   @Input() product!: Product;
 
   constructor(
     private modalService: NbDialogService
   ){}
+
+  ngOnInit(): void {
+    if (this.product.statusRevervado) {
+      console.log("statusReservado: ", this.product.statusRevervado)
+    }
+  }
 
   openModal(){
     this.modalService.open(ModalPresenteComponent,{
@@ -31,6 +37,7 @@ export class CardPresenteComponent {
         console.log('Formulário enviado: ', data)
         console.log('Titulo: ', this.product)
       }
+
     });
   }
 
