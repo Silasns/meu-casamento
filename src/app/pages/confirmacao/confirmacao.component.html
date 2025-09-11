@@ -4,10 +4,6 @@
     <nb-icon icon="file-text-outline"></nb-icon>
     <span class="ml-1">RESUMO</span>
     <div class="ms-3 d-flex flex-column">
-      <div>
-        Valor no boleto bancário:
-        <strong>R$ {{ valorBoleto | number:'1.2-2' }}</strong>
-      </div>
       <div class="small text-muted">
         Método: {{ selectedMethod | uppercase }}
       </div>
@@ -32,7 +28,6 @@
               [expanded]="selectedMethod === m.value"
               
             >
-              <!-- cabeçalho: clique controlado via CSS/customização -->
               <nb-accordion-item-header  (click)="selectMethod(m.value)" (click)="$event.stopPropagation()">
                 <nb-radio
                   [value]="m.value"
@@ -104,8 +99,8 @@
         <h4 class="mb-3">Resumo</h4>
 
         <div class="mb-3">
-          <div><strong>Produto:</strong> {{ productValue?.titulo }}</div>
-          <div><strong>Descrição:</strong> {{ productValue?.descricao }}</div>
+          <div><strong>Produto:</strong> {{ productValue.titulo }}</div>
+          <div><strong>Descrição:</strong> {{ productValue.descricao }}</div>
         </div>
 
         <div class="mb-3" style="font-size: 0.9rem;">
@@ -115,8 +110,7 @@
                TODO
                 Mudar o valor do produto para number do tipo inteiro, atualmente esta strign
             -->
-            <span>R$ {{ valorProdutos | number:'1.2-2' }}</span>
-            <span>R$ {{ productValue?.valor }}</span>
+            <span>{{ productValue.valor / 100 | currency:'BRL':'symbol':'1.2-2' }}</span>
           </div>
           <hr />
         </div>
