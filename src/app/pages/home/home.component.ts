@@ -27,10 +27,8 @@ export class HomeComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: (listProducts) => {
         this.products = listProducts;
-        console.log('Produtcs: ', listProducts)
       },
       error: (err) => {
-        console.error('Erro ao buscar produtos', err);
       }
     })
   }

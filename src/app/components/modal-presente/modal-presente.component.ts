@@ -39,7 +39,6 @@ export class ModalPresenteComponent {
       this.dialogRef.close();
       this.paymentFlow.start();
       this.storagePayment.setUser(this.form.value);
-      console.log("form: ", this.form.value)
       this.storagePayment.setProduct(this.product);
       this.router.navigate(['/confirmacao'])
     }

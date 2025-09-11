@@ -10,6 +10,7 @@ import { ProductStorageService } from '../../services/product-storage.service';
 import { filter, Observable, take } from 'rxjs';
 import { UserModel } from '../../models/user.model';
 import { ProductsService } from '../../services/products.service';
+import { ProductLinkRequest } from '../../models/product-link-request.model';
 
 @Component({
   selector: 'app-confirmacao',
@@ -20,8 +21,9 @@ import { ProductsService } from '../../services/products.service';
 export class ConfirmacaoComponent implements OnInit {
   paymentForm: FormGroup;
   selectedMethod: any;
-  productValue: Product | null = null;  
-  userValue: UserModel | null = null;
+  productValue!: Product;  
+  userValue!: UserModel;
+  urlPagamento: string = '';
 
   readonly product$: Observable<Product | null>;
   readonly userInfo$: Observable<UserModel | null>;
@@ -32,11 +34,6 @@ export class ConfirmacaoComponent implements OnInit {
     { value: 'card',  label: 'Cartão',     icon: 'credit-card-outline' },
   ];
 
-  valorProdutos = 4711.08;
-  desconto = 235.56;
-  frete = 41.78;
-  valorBoleto = 4517.30;
-  economia = 235.56;
   textoContinuar: string = "Finalizar";
 
   constructor(
@@ -58,6 +55,7 @@ export class ConfirmacaoComponent implements OnInit {
     this.paymentFlow.clear();
     this.popularDados();
     this.selectMethod('lojas');
+    this.montarLinkPagamento();
   }
 
   popularDados(){
@@ -85,50 +83,40 @@ export class ConfirmacaoComponent implements OnInit {
 
   selectMethod(value: string) {
     this.paymentForm.get('paymentMethod')!.setValue(value);
-    console.log("Prodct: ", this.productValue)
-    console.log("Method: ", this.method);
     if(this.method === "card"){
-      console.log("Continuar")
       this.textoContinuar = 'Continuar';
     } else {
-      console.log("Finalizar")
       this.textoContinuar = 'Finalizar';
     }
   }
 
   onContinue() {
     const metodo = this.method;
-    console.log('Continuar com método:', this.paymentForm.get('paymentMethod')!.value);
     if (this.method === "card") {
-      this.montarLinkPagamento();
+     // this.montarLinkPagamento();
     }
-    //this.router.navigate(['/conclusao']);
+    this.goToPaymentNewTab(this.urlPagamento);
   }
 
   montarLinkPagamento(){
-    let linkPagamento2: string =''
-    const request = {
-        "handle": "silas-nc",
-        "redirect_url": "https://silascardoso.com.br/",
-        "order_nsu": "123456",
-        "items": [
-          {
-            "quantity": 1,
-            "price": 1000,
-            "description": "Curso de Vendas Online"
-          },
-          {
-            "quantity": 1,
-            "price": 500,
-            "description": "Taxa de entrega"
-          }
-        ]
-      }
+    const request: ProductLinkRequest = {
+      order_nsu: this.productValue.id,
+      customer: {
+        name: this.userValue.nome,
+        email: this.userValue.email,
+        phone_number: this.userValue.telefone
+      },
+      items: [
+        {
+          quantity: 1,
+          price: this.productValue.valor,
+          description: this.productValue.descricao
+        }
+      ],
+    }
     this.productsService.getLinkPagamento(request).subscribe(response => {
-      console.log("link: ", response)
+      this.urlPagamento = response.url;
     })
-    //const linkPagamento = `https://checkout.infinitepay.io/silas-nc?items=[{"name":"${this.productValue?.titulo}","price":${this.productValue?.valor},"quantity":1}]&order_nsu=${this.productValue?.id}&redirect_url=https://silascardoso.com.br/&customer_name=${this.userValue?.nome}&customer_email=${this.userValue?.email}&customer_cellphone=${this.userValue?.telefone}`;
-    //this.goToPaymentNewTab(linkPagamento);
   }
 
   goToPaymentNewTab(url: string) {

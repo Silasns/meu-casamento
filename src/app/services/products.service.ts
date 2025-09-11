@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs';
 import { ProcuctResposeModel } from '../models/products-response.model';
 import { environment } from '../../environments/environment';
+import { ProductLinkRequest } from '../models/product-link-request.model';
+import { ProductLinkResponse } from '../models/product-link-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +12,16 @@ import { environment } from '../../environments/environment';
 export class ProductsService {
 
   private baseUrl = environment.API_CASAMENTO;
-  private urlPagamento = environment.API_INFINITE
 
   constructor(
     private http: HttpClient
   ) { }
 
   getProducts(): Observable<ProcuctResposeModel>{
-    return this.http.get<ProcuctResposeModel>(`${this.baseUrl}/products`);
+    return this.http.get<ProcuctResposeModel>(`${this.baseUrl}/api/produtos`);
   }
 
-  getLinkPagamento(request: any) {
-    return this.http.post(this.urlPagamento, request)
+  getLinkPagamento(request: ProductLinkRequest) {
+    return this.http.post<ProductLinkResponse>(`${this.baseUrl}/api/link-pagamento`, request)
   }
 }
