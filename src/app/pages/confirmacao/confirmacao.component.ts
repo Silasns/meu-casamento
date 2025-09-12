@@ -30,8 +30,7 @@ export class ConfirmacaoComponent implements OnInit {
 
   methods = [
     { value: 'lojas', label: 'Comprar diretamente na Loja',      icon: 'shopping-bag-outline' },
-    { value: 'pix',   label: 'Pix',        icon: '' },
-    { value: 'card',  label: 'Cartão',     icon: 'credit-card-outline' },
+    { value: 'card',  label: 'PIX ou CARTÃO. Envie o valor do produto diretamente para nós.',     icon: 'credit-card-outline' },
   ];
 
   textoContinuar: string = "Finalizar";
@@ -82,6 +81,7 @@ export class ConfirmacaoComponent implements OnInit {
   }  
 
   selectMethod(value: string) {
+    this.selectedMethod = value;
     this.paymentForm.get('paymentMethod')!.setValue(value);
     if(this.method === "card"){
       this.textoContinuar = 'Continuar';
@@ -93,9 +93,11 @@ export class ConfirmacaoComponent implements OnInit {
   onContinue() {
     const metodo = this.method;
     if (this.method === "card") {
-     // this.montarLinkPagamento();
+      this.goToPaymentNewTab(this.urlPagamento);
+    } else if(this.method === "lojas") {
+      this.goToConfirmacao();
     }
-    this.goToPaymentNewTab(this.urlPagamento);
+    
   }
 
   montarLinkPagamento(){
@@ -137,6 +139,10 @@ export class ConfirmacaoComponent implements OnInit {
 
   voltarHome(){
     this.router.navigate(['/']);
+  }
+
+  goToConfirmacao() {
+    this.router.navigate(['/conclusao']);
   }
   
 }

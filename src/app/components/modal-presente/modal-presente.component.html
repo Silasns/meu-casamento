@@ -1,32 +1,98 @@
-<!-- form-dialog.component.html -->
-<nb-card class="modal-size">
-    <nb-card-header class="card-text">
-        <h3>Você tem certeza?</h3>
-        <p>Você está prestes a reservar este presente:</p>
-        <p>Cafeiteira</p>
-    </nb-card-header>
-  <nb-card-body>
+<div class="modal-container">
+  <!-- Header do Modal -->
+  <div class="modal-header">
+    <h2 class="modal-title">Você tem certeza?</h2>
+    <div>
+      <p class="modal-subtitle">Você está prestes a reservar este presente:</p>
+      <p class="product-name">{{ product.titulo }}</p>
+    </div>
+  </div>
+
+  <!-- Body do Modal -->
+  <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
-        <label>Nome</label>
-        <input class="mt-2" nbInput fullWidth formControlName="nome" fieldSize="small" placeholder="Digite seu nome"/>
+        <label class="form-label">Nome Completo</label>
+        <input 
+          class="form-input" 
+          nbInput 
+          fullWidth 
+          formControlName="nome" 
+          fieldSize="medium" 
+          placeholder="Digite seu nome completo"
+        />
+        <div class="form-error" *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched">
+          <span *ngIf="form.get('nome')?.errors?.['required']">Nome é obrigatório</span>
+        </div>
       </div>
-      <div class="form-group mt-4">
-        <label>Telefone</label>
-        <input class="mt-2" nbInput fullWidth formControlName="telefone" type="tel" fieldSize="small" placeholder="(71) 9 9999-9999S"/>
+
+      <div class="form-group">
+        <label class="form-label">Telefone</label>
+        <input 
+          class="form-input" 
+          nbInput 
+          fullWidth 
+          formControlName="telefone" 
+          type="tel" 
+          fieldSize="medium" 
+          placeholder="(71) 9 9999-9999"
+        />
+        <div class="form-error" *ngIf="form.get('telefone')?.invalid && form.get('telefone')?.touched">
+          <span *ngIf="form.get('telefone')?.errors?.['required']">Telefone é obrigatório</span>
+          <span *ngIf="form.get('telefone')?.errors?.['pattern']">Formato de telefone inválido</span>
+        </div>
       </div>
-      <div class="form-group mt-4">
-        <label>E‑mail</label>
-        <input class="mt-2" nbInput fullWidth formControlName="email" fieldSize="small" placeholder="Digite seu e-mail"/>
+
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input 
+          class="form-input" 
+          nbInput 
+          fullWidth 
+          formControlName="email" 
+          fieldSize="medium" 
+          placeholder="Digite seu e-mail"
+        />
+        <div class="form-error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+          <span *ngIf="form.get('email')?.errors?.['required']">E-mail é obrigatório</span>
+          <span *ngIf="form.get('email')?.errors?.['email']">Digite um e-mail válido</span>
+        </div>
       </div>
-      <div class="form-group mt-4 mb-2">
-        <label>Mensagem para o casal</label>
-        <textarea class="mt-2" nbInput fullWidth formControlName="mensagem" placeholder="Deixe uma mensagem para o casal ..." ></textarea>
+
+      <div class="form-group">
+        <label class="form-label">Mensagem para o casal</label>
+        <textarea 
+          class="form-textarea" 
+          nbInput 
+          fullWidth 
+          formControlName="mensagem" 
+          placeholder="Deixe uma mensagem carinhosa para o casal..."
+          rows="3"
+        ></textarea>
       </div>
     </form>
-  </nb-card-body>
-  <nb-card-footer class="d-flex justify-content-center gap-2 ">
-    <button nbButton status="danger" (click)="cancel()">Cancelar</button>
-    <button nbButton status="primary" [disabled]="!form.valid" (click)="submit()">Reservar</button>
-  </nb-card-footer>
-</nb-card>
+  </div>
+
+  <!-- Footer do Modal -->
+  <div class="modal-footer">
+    <button 
+      class="btn btn-primary" 
+      type="button" 
+      [disabled]="!form.valid" 
+      (click)="submit()">
+      <span class="btn-icon">🎁</span>
+      Reservar e Continuar
+      <span class="btn-arrow">→</span>
+    </button>
+  </div>
+
+  <!-- Botão Cancelar na parte inferior esquerda -->
+  <div class="modal-bottom-left-actions">
+    <button 
+      class="btn btn-danger" 
+      type="button" 
+      (click)="cancel()">
+      Cancelar
+    </button>
+  </div>
+</div>

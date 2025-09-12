@@ -24,7 +24,7 @@ export class ModalPresenteComponent {
   ) {
     this.form = this.fb.group({
       nome: ['', [Validators.required]],
-      telefone: ['', []],
+      telefone: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       mensagem: ['', []],
     });
