@@ -1,21 +1,34 @@
 
-<nb-card>
-<nb-card-header class="card-text">{{ product.titulo }}</nb-card-header>
-<nb-card-body>
-    <div class="row">
-        <img 
-        class="present-image"
-        src= "{{ product.imageUrl }}" 
-        alt= "{{ product.imageAlt }}">
+<div class="product-card">
+  <!-- Imagem do Produto -->
+  <div class="product-image-container">
+    <img 
+      class="product-image"
+      src="/images/cafeteira.jpg" 
+      alt="{{ product.imageAlt || product.titulo }}">
+  </div>
+  
+  <!-- Conteúdo do Card -->
+  <div class="product-content">
+    <!-- Tag de Status -->
+    <div class="status-tag" [class.available]="product.disponivel" [class.reserved]="!product.disponivel">
+      {{ product.disponivel ? 'Disponível' : 'Reservado' }}
     </div>
-    <div class="row card-text">
-        <p>{{ product.descricao }}</p>
-    </div>
-</nb-card-body>
-    <nb-card-footer>
-        <button (click)="openModal()" nbButton hero status="primary" class="w-100">
-            <nb-icon icon="checkmark-outline"></nb-icon>
-        {{ product.disponivel ? 'Reservar' : 'Reservado' }}
-        </button>
-    </nb-card-footer>
-</nb-card>
+    
+    <!-- Título do Produto -->
+    <h3 class="product-title">{{ product.titulo }}</h3>
+    
+    <!-- Descrição -->
+    <p class="product-description">{{ product.descricao }}</p>
+    
+    <!-- Botão de Ação -->
+    <button 
+      class="action-button" 
+      [class.disabled]="!product.disponivel"
+      (click)="openModal()"
+      [disabled]="!product.disponivel">
+      <span class="button-icon">🎁</span>
+      {{ product.disponivel ? 'Reservar Presente' : 'Já Reservado' }}
+    </button>
+  </div>
+</div>

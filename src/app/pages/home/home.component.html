@@ -1,8 +1,60 @@
 
 
-Bem vindo ao site do nosso Chá de Casa Nova! 
-Aqui nesse site temos a nossa lista de presentes, onde você pode escolher entre mandar a quantia pelo site ou realizar a compra por conta própria e levar o item ao nosso chá no dia 12/10.
-Lembre=se, nada é pequeno se feito com amor!  - St. Teresinha do Menino Jesus
+<!-- Seção Hero -->
+<section class="hero-section">
+  <div class="hero-image-container">
+    <img src="/images/silasol.jpg" alt="Silas e Sofia" class="hero-image">
+    <div class="hero-overlay">
+      <h1 class="hero-title">Silas e Sofia</h1>
+      <p class="hero-subtitle">Construindo nosso lar com amor</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- Modal de Boas-vindas -->
+<div *ngIf="showWelcomeModal" class="modal-overlay" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <button class="close-button" (click)="closeWelcomeModal()" aria-label="Fechar modal">
+      <span>&times;</span>
+    </button>
+    
+    <!-- Seção Superior com Imagem -->
+    <div class="modal-image-section">
+      <img src="/images/silasol.jpg" alt="Silas e Sol" class="couple-image">
+    </div>
+    
+    <!-- Seção Inferior com Conteúdo -->
+    <div class="modal-content-section">
+      <h2 class="modal-title">Bem-vindos ao nosso Chá de Casa Nova!</h2>
+      
+      <div class="features-list">
+        <div class="feature-item">
+          <span class="feature-icon">🎁</span>
+          <span>Lista de presentes personalizada</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">💝</span>
+          <span>Escolha entre pagamento online ou presencial</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📅</span>
+          <span>Chá de Casa Nova no dia 12/10</span>
+        </div>
+      </div>
+      
+      <p class="welcome-message">
+        Que alegria ter vocês aqui conosco neste momento especial! 
+        Nada é pequeno se feito com amor! 💕
+      </p>
+      
+      <button class="continue-button" (click)="closeWelcomeModal()">
+        VER LISTA DE PRESENTES
+      </button>
+    </div>
+  </div>
+</div>
+
 
 <div class="container py-4">
     <div class="row gx-4 gy-4">

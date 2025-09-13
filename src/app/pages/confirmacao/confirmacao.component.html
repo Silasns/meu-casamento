@@ -1,127 +1,145 @@
-<!-- =================== INÍCIO: footer móvel fixo embaixo (aparece só em <1024px) =================== -->
-<div class="mobile-footer">
-  <div class="summary-info">
-    <nb-icon icon="file-text-outline"></nb-icon>
-    <span class="ml-1">RESUMO</span>
-    <div class="ms-3 d-flex flex-column">
-      <div class="small text-muted">
-        Método: {{ selectedMethod | uppercase }}
+<!-- Container Principal -->
+<div class="confirmation-container">
+  <!-- Header da Página -->
+  <div class="page-header">
+    <h1 class="page-title">Finalizar Reserva</h1>
+    <p class="page-subtitle">Escolha a forma de pagamento para reservar seu presente</p>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <!-- Card de Pagamento -->
+    <div class="payment-section">
+      <div class="payment-card">
+        <div class="card-header">
+          <h2 class="card-title">Forma de Pagamento</h2>
+          <p class="card-subtitle">Selecione como deseja realizar o pagamento</p>
+        </div>
+        
+        <div class="card-body">
+          <form [formGroup]="paymentForm">
+            <div class="payment-methods">
+              <div 
+                *ngFor="let m of methods" 
+                class="payment-method"
+                [class.selected]="selectedMethod === m.value">
+                
+                <div class="method-header" (click)="selectMethod(m.value)">
+                  <div class="method-info">
+                    <div class="method-radio">
+                      <input 
+                        type="radio" 
+                        [value]="m.value"
+                        [checked]="selectedMethod === m.value"
+                        (change)="selectMethod(m.value)"
+                        name="paymentMethod">
+                      <span class="radio-custom"></span>
+                    </div>
+                    <div class="method-details">
+                      <h3 class="method-title">{{ m.label }}</h3>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="method-content" *ngIf="selectedMethod === m.value">
+                  <div *ngIf="m.value === 'lojas'" class="store-options">
+                    <p class="store-text">Escolha a loja:</p>
+                    <div class="store-buttons">
+                      <a 
+                        href="https://shopee.com" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="store-btn shopee"
+                      >
+                        <span>Shopee</span>
+                      </a>
+                      <a 
+                        href="https://magalu.com" 
+                        target="_blank"
+                        rel="noopener noreferrer" 
+                        class="store-btn magalu"
+                      >
+                        <span>Magalu</span>
+                      </a>
+                    </div>
+                    <div class="store-warning mt-3">
+                      <div class="warning-icon">
+                        <nb-icon icon="info-outline"></nb-icon>
+                      </div>
+                      <p class="warning-text">Pegue os links para as lojas e depois clique em finalizar para reservar o item</p>
+                    </div>
+                  </div>
+                  
+                  <div *ngIf="m.value === 'card'" class="card-info">
+                    <p class="content-text">Você será redirecionado ao checkout seguro.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="alert-info">
+            <div class="alert-icon">
+              <img src="/images/bell.png" alt="Atenção">
+            </div>
+            <div class="alert-text">
+              <strong>Atenção:</strong> Lembre-se de clicar em finalizar para reservar o item!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card de Resumo -->
+    <div class="summary-section">
+      <div class="summary-card">
+        <div class="card-header">
+          <h2 class="card-title">Resumo do Pedido</h2>
+        </div>
+        
+        <div class="card-body">
+          <div class="product-info">
+            <h3 class="product-title">{{ productValue.titulo }}</h3>
+            <p class="product-description">{{ productValue.descricao }}</p>
+          </div>
+
+          <div class="price-section">
+            <div class="price-item">
+              <span class="price-label">Valor do Produto:</span>
+              <span class="price-value">{{ productValue.valor / 100 | currency:'BRL':'symbol':'1.2-2' }}</span>
+            </div>
+            <div class="price-divider"></div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn btn-secondary" (click)="voltarHome()">
+              <span class="btn-icon">←</span>
+              Voltar
+            </button>
+            <button class="btn btn-primary" (click)="onContinue()">
+              <span class="btn-icon">🎁</span>
+              {{ textoContinuar }}
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <button nbButton status="primary" class="btn-continue-mobile" (click)="onContinue()">
-    CONTINUAR
-  </button>
-</div>
-<!-- =================== FIM: footer móvel =================== -->
 
-<div class="container-pay">
-  <div class="inner">
-    <!-- card de pagamento (desktop & mobile) -->
-    <nb-card class="payment-card">
-      <nb-card-body>
-        <h3>Escolha uma das formas de pagamento:</h3>
-        <form [formGroup]="paymentForm">
-          <nb-accordion >
-            <nb-accordion-item
-              *ngFor="let m of methods"
-              [expanded]="selectedMethod === m.value"
-              
-            >
-              <nb-accordion-item-header  (click)="selectMethod(m.value)" (click)="$event.stopPropagation()">
-                <nb-radio
-                  [value]="m.value"
-                  [checked]="selectedMethod === m.value"
-                  (checkedChange)="paymentForm.get('paymentMethod')!.setValue(m.value)"
-                >
-                  <span class="ml-2">{{ m.label }}</span>
-                </nb-radio>
-
-                <nb-icon
-                  [icon]="m.icon"
-                  class="custom-toggle-icon"
-                ></nb-icon>
-                <div *ngIf="m.value === 'pix'">
-                  <img 
-                    src="/images/pix.png" 
-                    alt="Pix" 
-                    class="pix-logo custom-toggle-icon-2"
-                  />
-                </div>
-              </nb-accordion-item-header>
-
-              <nb-accordion-item-body>
-                <div *ngIf="m.value === 'lojas'">
-                  <p>Escolha a loja:</p>
-                  <a 
-                    href="https://shopee.com" 
-                    nbButton 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    status="info"
-                  >
-                    Shopee
-                  </a>
-                  <a 
-                    href="https://magalu.com" 
-                    nbButton
-                    target="_blank"
-                    rel="noopener noreferrer" 
-                    status="warning"
-                  >
-                    Magalu
-                  </a>                    
-                </div>
-                <div *ngIf="m.value === 'pix'">
-                  <p>Copie nossa chave e finalize no seu app bancário.</p>
-                </div>
-                <div *ngIf="m.value === 'card'">
-                  <p>Você será redirecionado ao checkout de cartão.</p>
-                </div>
-              </nb-accordion-item-body>
-            </nb-accordion-item>
-          </nb-accordion>
-        </form>
-        <nb-alert class="mt-2 flex align-items-center" status="info">
-          <img
-            src="/images/bell.png"
-            alt="imagem de um sino"
-            class="alert-logo"
-          />
-          Atenção. Lembre-se de clicar em finalizar para reservar o item!
-        </nb-alert>
-      </nb-card-body>
-    </nb-card>
-
-    <!-- card de resumo (aparece apenas em desktop) -->
-    <nb-card class="summary-card">
-      <nb-card-body class="d-flex flex-column" style="padding: 1rem;">
-        <h4 class="mb-3">Resumo</h4>
-
-        <div class="mb-3">
-          <div><strong>Produto:</strong> {{ productValue.titulo }}</div>
-          <div><strong>Descrição:</strong> {{ productValue.descricao }}</div>
-        </div>
-
-        <div class="mb-3" style="font-size: 0.9rem;">
-          <div class="d-flex justify-content-between">
-            <span>Valor do Médio do Produto:</span>
-            <!--
-               TODO
-                Mudar o valor do produto para number do tipo inteiro, atualmente esta strign
-            -->
-            <span>{{ productValue.valor / 100 | currency:'BRL':'symbol':'1.2-2' }}</span>
-          </div>
-          <hr />
-        </div>
-
-        <div class="flex-grow-1"></div>
-
-        <div class="d-flex justify-content-end gap-2 mt-2">
-          <button nbButton status="danger" size="small" (click)="voltarHome()">Voltar</button>
-          <button nbButton status="primary" size="small" type="submit" (click)="onContinue()">{{ textoContinuar }}</button>
-        </div>
-      </nb-card-body>
-    </nb-card>
+  <!-- Footer Mobile -->
+  <div class="mobile-footer">
+    <div class="mobile-summary">
+      <div class="summary-icon">
+        <nb-icon icon="file-text-outline"></nb-icon>
+      </div>
+      <div class="summary-text">
+        <span class="summary-label">RESUMO</span>
+        <span class="summary-method">{{ selectedMethod | uppercase }}</span>
+      </div>
+    </div>
+    <button class="btn btn-primary mobile-btn" (click)="onContinue()">
+      {{ textoContinuar }}
+    </button>
   </div>
 </div>
