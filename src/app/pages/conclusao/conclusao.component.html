@@ -1,15 +1,50 @@
-<!-- conclusao.component.html -->
 <div class="conclusion-page">
-  <nb-card class="conclusion-card">
-    <nb-card-body class="content">
-      <h1 class="title">Muito Obrigado!</h1>
-      <p class="subtitle">
-        Agradecemos pela sua preferência.<br>
-        Sua compra foi realizada com sucesso.
-      </p>
-      <button nbButton status="primary" (click)="voltarHome()">
-        Voltar para Home
-      </button>
-    </nb-card-body>
-  </nb-card>
+  <div class="conclusion-container">
+    <!-- Seção Hero com Foto -->
+    <div class="hero-section">
+      <div class="hero-image-container">
+        <img src="/images/silasol.jpg" alt="Silas e Sofia" class="hero-image">
+        <div class="hero-overlay">
+          <div class="celebration-icon">
+            <nb-icon icon="heart-outline"></nb-icon>
+          </div>
+          <h1 class="hero-title">Obrigado!</h1>
+          <p class="hero-subtitle">Sua contribuição é muito especial para nós</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Principal -->
+    <div class="conclusion-card">
+      <div class="card-header">
+        <h2 class="card-title">Reserva Confirmada!</h2>
+      </div>
+      
+      <div class="card-body">
+        <div class="success-message">
+          <p class="message-text">
+            Agradecemos de coração por fazer parte deste momento tão especial!
+          </p>
+          <p class="message-detail">
+            Sua generosidade e carinho são fundamentais para tornar nosso lar ainda mais perfeito.
+          </p>
+        </div>
+        
+        <div class="home-link">
+          <a href="/" class="home-link-text">
+            <nb-icon icon="arrow-back-outline"></nb-icon>
+            <span>Voltar ao início</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Elementos Decorativos -->
+    <div class="decorative-elements">
+      <div class="floating-heart heart-1">💕</div>
+      <div class="floating-heart heart-2">💖</div>
+      <div class="floating-heart heart-3">💗</div>
+      <div class="floating-heart heart-4">💝</div>
+    </div>
+  </div>
 </div>

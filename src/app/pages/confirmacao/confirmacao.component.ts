@@ -11,6 +11,7 @@ import { filter, Observable, take } from 'rxjs';
 import { UserModel } from '../../models/user.model';
 import { ProductsService } from '../../services/products.service';
 import { ProductLinkRequest } from '../../models/product-link-request.model';
+import { VincularUsuarioRequestModel } from '../../models/vincular-usuario-request.model';
 
 @Component({
   selector: 'app-confirmacao',
@@ -24,14 +25,14 @@ export class ConfirmacaoComponent implements OnInit {
   productValue!: Product;  
   userValue!: UserModel;
   urlPagamento: string = '';
+  cardErro: boolean = false;
 
   readonly product$: Observable<Product | null>;
   readonly userInfo$: Observable<UserModel | null>;
 
   methods = [
     { value: 'lojas', label: 'Comprar diretamente na Loja',      icon: 'shopping-bag-outline' },
-    { value: 'pix',   label: 'Pix',        icon: '' },
-    { value: 'card',  label: 'Cartão',     icon: 'credit-card-outline' },
+    { value: 'card',  label: 'PIX ou CARTÃO. Envie o valor do produto diretamente para nós.',     icon: 'credit-card-outline' },
   ];
 
   textoContinuar: string = "Finalizar";
@@ -52,7 +53,7 @@ export class ConfirmacaoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.paymentFlow.clear();
+    //this.paymentFlow.clear();
     this.popularDados();
     this.selectMethod('lojas');
     this.montarLinkPagamento();
@@ -82,6 +83,7 @@ export class ConfirmacaoComponent implements OnInit {
   }  
 
   selectMethod(value: string) {
+    this.selectedMethod = value;
     this.paymentForm.get('paymentMethod')!.setValue(value);
     if(this.method === "card"){
       this.textoContinuar = 'Continuar';
@@ -93,9 +95,12 @@ export class ConfirmacaoComponent implements OnInit {
   onContinue() {
     const metodo = this.method;
     if (this.method === "card") {
-     // this.montarLinkPagamento();
+      this.goToPaymentNewTab(this.urlPagamento);
+      console.log("Metodo pagamento1: ", this.method);
+    } else if(this.method === "lojas") {
+       this.vincularUsuarioReservarProduto();
     }
-    this.goToPaymentNewTab(this.urlPagamento);
+    
   }
 
   montarLinkPagamento(){
@@ -137,6 +142,44 @@ export class ConfirmacaoComponent implements OnInit {
 
   voltarHome(){
     this.router.navigate(['/']);
+  }
+
+  goToConfirmacao() {
+    console.log('go to conclusao')
+    this.router.navigate(['/conclusao']);
+  }
+
+  atualizarReservaProduto() {
+    const request = {"reservado": true}
+    console.log("Id: ", this.productValue.id)
+    this.productsService.patchProduto(this.productValue.id, request).subscribe({
+      next: (response) => {
+        this.goToConfirmacao();
+      },
+      error: (error) => {
+        this.cardErro = true;
+        console.error('Erro ao reservar produto:', error);
+      }
+    });
+  }
+
+  vincularUsuarioReservarProduto() {
+    const request: VincularUsuarioRequestModel = {
+        nome: this.userValue.nome,
+        telefone: this.userValue.telefone,
+        email: this.userValue.email,
+        mensagem: this.userValue.mensagem,
+        produtoId: this.productValue.id,
+        meioReserva: this.method
+    };
+    this.productsService.postVinculaProdutoUsuario(request).subscribe({
+      next: (response) => {
+        this.goToConfirmacao();
+      },
+      error: (error) => {
+        this.cardErro = true;
+      }
+    })
   }
   
 }

@@ -17,11 +17,11 @@ export class ConclusaoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.paymentStorage.clear()
-    this.paymentFlow.clear();
   }
 
   voltarHome() {
+    this.paymentStorage.clear();
+    this.paymentFlow.clear();
     this.router.navigate(['/']);
   }
 }
