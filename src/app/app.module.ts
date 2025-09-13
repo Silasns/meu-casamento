@@ -29,6 +29,7 @@ import { ConfirmacaoComponent } from './pages/confirmacao/confirmacao.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ConclusaoComponent } from './pages/conclusao/conclusao.component';
+import { ConclusaoPayComponent } from './pages/conclusao-pay/conclusao-pay.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ConclusaoComponent } from './pages/conclusao/conclusao.component';
     ModalPresenteComponent,
     ConfirmacaoComponent,
     ConclusaoComponent,
+    ConclusaoPayComponent,
     
   ],
   imports: [

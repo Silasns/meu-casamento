@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { ConfirmacaoComponent } from './pages/confirmacao/confirmacao.component';
 import { ConclusaoComponent } from './pages/conclusao/conclusao.component';
+import { ConclusaoPayComponent } from './pages/conclusao-pay/conclusao-pay.component';
 import { ConfirmationGuard } from './guards/confirmation.guard';
 
 const routes: Routes = [ 
@@ -12,7 +13,8 @@ const routes: Routes = [
     component: ConfirmacaoComponent,
     canActivate: [ConfirmationGuard] 
   },
-  { path: 'conclusao', component: ConclusaoComponent }
+  { path: 'conclusao', component: ConclusaoComponent },
+  { path: 'conclusao-pay', component: ConclusaoPayComponent }
 
 ]
 
