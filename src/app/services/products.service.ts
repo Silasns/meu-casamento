@@ -18,10 +18,18 @@ export class ProductsService {
   ) { }
 
   getProducts(): Observable<ProcuctResposeModel>{
-    return this.http.get<ProcuctResposeModel>(`${this.baseUrl}/api/produtos`);
+    return this.http.get<ProcuctResposeModel>(`${this.baseUrl}/produtos`);
   }
 
   getLinkPagamento(request: ProductLinkRequest) {
-    return this.http.post<ProductLinkResponse>(`${this.baseUrl}/api/link-pagamento`, request)
+    return this.http.post<ProductLinkResponse>(`${this.baseUrl}/link-pagamento`, request)
+  }
+
+  patchProduto(id: string, request: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/produtos/${id}/status`, request)
+  }
+
+  postVinculaProdutoUsuario(request: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/usuarios/reservar`, request);
   }
 }
