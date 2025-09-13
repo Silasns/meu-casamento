@@ -17,7 +17,7 @@
 .modal-header {
   background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
   color: white;
-  padding: 25px 30px;
+  padding: 10px 15px;
   text-align: center;
   position: relative;
 }
@@ -60,7 +60,7 @@
 
 /* Formulário */
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .form-label {
@@ -232,7 +232,7 @@
   }
   
   .modal-header {
-    padding: 20px 20px;
+    padding: 5px 5px;
   }
   
   .modal-title {
@@ -249,6 +249,10 @@
     flex-direction: column;
     gap: 12px;
   }
+
+  /* No mobile, mostrar o botão primário primeiro, depois cancelar */
+  .modal-footer .btn-primary { order: 1; }
+  .modal-footer .btn-danger  { order: 2; }
   
   .btn {
     width: 100%;
@@ -256,4 +260,11 @@
     padding: 14px 20px;
     font-size: 0.95rem;
   }
+}
+
+/* Deixar o primário desabilitado mais visível e com contraste melhor */
+.btn-primary:disabled {
+  background: linear-gradient(135deg, #ff9aa5 0%, #ffb3c0 100%);
+  color: #ffffff;
+  opacity: 0.9;
 }

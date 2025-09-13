@@ -76,12 +76,6 @@
   <!-- Footer do Modal -->
   <div class="modal-footer">
     <button 
-      class="btn btn-danger" 
-      type="button" 
-      (click)="cancel()">
-      Cancelar
-    </button>
-    <button 
       class="btn btn-primary" 
       type="button" 
       [disabled]="!form.valid" 
@@ -89,6 +83,12 @@
       <span class="btn-icon">🎁</span>
       Reservar e Continuar
       <span class="btn-arrow">→</span>
+    </button>
+    <button 
+      class="btn btn-danger" 
+      type="button" 
+      (click)="cancel()">
+      Cancelar
     </button>
   </div>
 </div>
