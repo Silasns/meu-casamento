@@ -1,0 +1,58 @@
+<div class="modal-container">
+  <!-- Header do Modal -->
+  <div class="modal-header">
+    <h2 class="modal-title">Você será redirecionado para o link de pagamento seguro.</h2>
+
+  </div>
+
+  <!-- Body do Modal -->
+  <div class="modal-body">
+    <div class="payment-info">
+      <div class="payment-icon">
+        <span class="icon">💳</span>
+      </div>
+      <div class="payment-details">
+        <h3>Pagamento Seguro</h3>
+        <p>Seu pagamento será processado de forma segura através do nosso parceiro de pagamento.</p>
+        <div class="security-badges">
+          <span class="badge">🔒 SSL</span>
+          <span class="badge">🛡️ Seguro</span>
+          <span class="badge">✅ Verificado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensagem de Erro -->
+  <div class="error-message" *ngIf="cardErro">
+    <div class="error-content">
+      <span class="error-icon">⚠️</span>
+      <div class="error-text">
+        <h4>Erro ao processar reserva</h4>
+        <p>Ocorreu um erro ao salvar sua reserva. Tente novamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer do Modal -->
+  <div class="modal-footer">
+    <button 
+      class="btn btn-primary" 
+      type="button" 
+      (click)="confirmar()"
+      [disabled]="isLoading">
+      <span class="btn-icon" *ngIf="!isLoading">💳</span>
+      <span class="btn-spinner" *ngIf="isLoading">⏳</span>
+      <span *ngIf="!isLoading">Ir para Pagamento</span>
+      <span *ngIf="isLoading">Salvando...</span>
+      <span class="btn-arrow" *ngIf="!isLoading">→</span>
+    </button>
+    <button 
+      class="btn btn-danger" 
+      type="button" 
+      (click)="cancelar()"
+      [disabled]="isLoading">
+      Cancelar
+    </button>
+  </div>
+</div>

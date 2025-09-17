@@ -4,7 +4,7 @@
   <div class="product-image-container">
     <img 
       class="product-image"
-      src="/images/cafeteira.jpg" 
+      src="{{ product.imageUrl }}" 
       alt="{{ product.imageAlt || product.titulo }}">
   </div>
   
@@ -18,9 +18,21 @@
     <!-- Título do Produto -->
     <h3 class="product-title">{{ product.titulo }}</h3>
     
-    <!-- Descrição -->
-    <p class="product-description">{{ product.descricao }}</p>
+    <!-- Valor do Produto -->
+    <h4 class="product-description">Valor médio: R$ {{ product.valor / 100 | currency:'BRL':'symbol':'1.2-2' }}</h4>
     
+    <!-- Botão para conferir nas lojas externas -->
+    <a 
+      *ngIf="hasExternalLink"
+      class="external-link-button"
+      [href]="externalUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span class="button-icon">🔗</span>
+      Visualizar
+    </a>
+
     <!-- Botão de Ação -->
     <button 
       class="action-button" 

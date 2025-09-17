@@ -4,6 +4,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { ConfirmacaoComponent } from './pages/confirmacao/confirmacao.component';
 import { ConclusaoComponent } from './pages/conclusao/conclusao.component';
 import { ConclusaoPayComponent } from './pages/conclusao-pay/conclusao-pay.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { FinalizarComponent } from './pages/finalizar/finalizar.component';
 import { ConfirmationGuard } from './guards/confirmation.guard';
 
 const routes: Routes = [ 
@@ -13,6 +15,8 @@ const routes: Routes = [
     component: ConfirmacaoComponent,
     canActivate: [ConfirmationGuard] 
   },
+  { path: 'checkout', component: CheckoutComponent },
+  { path: 'finalizar', component: FinalizarComponent },
   { path: 'conclusao', component: ConclusaoComponent },
   { path: 'conclusao-pay', component: ConclusaoPayComponent }
 

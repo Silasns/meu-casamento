@@ -1,0 +1,43 @@
+<div class="modal-container">
+  <!-- Header do Modal -->
+  <div class="modal-header">
+    <h2 class="modal-title">Selecione como deseja enviar o presente aos noivos</h2>
+    <button class="close-button" (click)="cancel()">
+      <span>×</span>
+    </button>
+  </div>
+
+  <!-- Body do Modal -->
+  <div class="modal-body">
+    <!-- Opção 1: Pagar diretamente aos noivos -->
+    <div class="payment-option" (click)="selectPaymentMethod('pagar_noivos')">
+      <div class="option-icon">
+        <span class="pix-icon">💳</span>
+      </div>
+      <div class="option-content">
+        <h3 class="option-title">Pagar diretamente aos noivos</h3>
+        <p class="option-description">Pix e Cartão de crédito</p>
+      </div>
+      <div class="option-tag novo">novo</div>
+    </div>
+
+    <!-- Opção 2: Pegar link da loja -->
+    <div class="payment-option" (click)="selectPaymentMethod('link_loja')">
+      <div class="option-icon">
+        <span class="link-icon">🔗</span>
+      </div>
+      <div class="option-content">
+        <h3 class="option-title">Pegar link da loja</h3>
+        <p class="option-description">Aqui você reserva o produto, pega o link e entrega diretamente aos noivos</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer do Modal -->
+  <div class="modal-footer">
+    <div class="security-info">
+      <span class="lock-icon">🔒</span>
+      <span class="security-text">COMPRA SEGURA</span>
+    </div>
+  </div>
+</div>

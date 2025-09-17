@@ -1,0 +1,17 @@
+<div class="step-indicator">
+  <div 
+    *ngFor="let step of steps; let i = index" 
+    class="step"
+    [class.active]="step.active"
+    [class.completed]="step.completed"
+  >
+    <div class="step-number">
+      <span *ngIf="!step.completed">{{ step.number }}</span>
+      <span *ngIf="step.completed" class="check-icon">✓</span>
+    </div>
+    <span class="step-title">{{ step.title }}</span>
+    
+    <!-- Divider após cada step exceto o último -->
+    <div *ngIf="i < steps.length - 1" class="step-divider"></div>
+  </div>
+</div>
