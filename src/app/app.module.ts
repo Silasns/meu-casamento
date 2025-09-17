@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import {
   NbThemeModule,
@@ -24,12 +26,16 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { CardPresenteComponent } from './components/card-presente/card-presente.component';
 import { ModalPresenteComponent } from './components/modal-presente/modal-presente.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ConfirmacaoComponent } from './pages/confirmacao/confirmacao.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ConclusaoComponent } from './pages/conclusao/conclusao.component';
 import { ConclusaoPayComponent } from './pages/conclusao-pay/conclusao-pay.component';
+import { ModalSelecaoPagamentoComponent } from './components/modal-selecao-pagamento/modal-selecao-pagamento.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { FinalizarComponent } from './pages/finalizar/finalizar.component';
+import { StepIndicatorComponent } from './components/step-indicator/step-indicator.component';
+import { ModalPagamentoComponent } from './components/modal-pagamento/modal-pagamento.component';
 
 @NgModule({
   declarations: [
@@ -40,10 +46,18 @@ import { ConclusaoPayComponent } from './pages/conclusao-pay/conclusao-pay.compo
     ConfirmacaoComponent,
     ConclusaoComponent,
     ConclusaoPayComponent,
+    ModalSelecaoPagamentoComponent,
+    CheckoutComponent,
+    FinalizarComponent,
+    StepIndicatorComponent,
+    ModalPagamentoComponent,
     
   ],
   imports: [
     BrowserModule,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     NbThemeModule.forRoot({ name: 'default' }),
@@ -57,7 +71,6 @@ import { ConclusaoPayComponent } from './pages/conclusao-pay/conclusao-pay.compo
     NbEvaIconsModule,
     NbIconModule,
     NbDialogModule.forRoot(),
-    ReactiveFormsModule,
     NbInputModule,
     NbRadioModule,
     NbAlertModule,

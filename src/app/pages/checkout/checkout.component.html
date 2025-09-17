@@ -1,0 +1,92 @@
+<div class="checkout-container">
+  <!-- Indicador de Etapas -->
+  <app-step-indicator currentStep="checkout"></app-step-indicator>
+
+  <!-- Header -->
+  <div class="checkout-header">
+    <h1 class="page-title">Seus Dados</h1>
+    <p class="page-subtitle">Preencha suas informações para continuar com a reserva.</p>
+    
+    <button class="back-button" (click)="goBack()">
+      <span class="back-icon">←</span>
+      Voltar
+    </button>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="checkout-content">
+    <!-- Formulário de Dados -->
+    <form [formGroup]="form" (ngSubmit)="submit()" class="user-form">
+      <div class="form-group">
+        <label class="form-label">Nome Completo</label>
+        <input 
+          class="form-input" 
+          nbInput 
+          fullWidth 
+          formControlName="nome" 
+          fieldSize="medium" 
+          placeholder="Digite seu nome completo"
+        />
+        <div class="form-error" *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched">
+          <span *ngIf="form.get('nome')?.errors?.['required']">Nome é obrigatório</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Telefone</label>
+        <input 
+          class="form-input" 
+          nbInput 
+          fullWidth 
+          formControlName="telefone" 
+          type="tel" 
+          fieldSize="medium" 
+          placeholder="(71) 9 9999-9999"
+        />
+        <div class="form-error" *ngIf="form.get('telefone')?.invalid && form.get('telefone')?.touched">
+          <span *ngIf="form.get('telefone')?.errors?.['required']">Telefone é obrigatório</span>
+          <span *ngIf="form.get('telefone')?.errors?.['pattern']">Formato de telefone inválido</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input 
+          class="form-input" 
+          nbInput 
+          fullWidth 
+          formControlName="email" 
+          fieldSize="medium" 
+          placeholder="Digite seu e-mail"
+        />
+        <div class="form-error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+          <span *ngIf="form.get('email')?.errors?.['required']">E-mail é obrigatório</span>
+          <span *ngIf="form.get('email')?.errors?.['email']">Digite um e-mail válido</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mensagem para o casal</label>
+        <textarea 
+          class="form-textarea" 
+          nbInput 
+          fullWidth 
+          formControlName="mensagem" 
+          placeholder="Deixe uma mensagem carinhosa para o casal..."
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          class="btn btn-primary" 
+          type="submit"
+          [disabled]="!form.valid">
+          <span class="btn-icon">🎁</span>
+          Continuar para Finalizar
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

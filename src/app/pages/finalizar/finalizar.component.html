@@ -1,0 +1,114 @@
+<div class="finalizar-container">
+  <!-- Indicador de Etapas -->
+  <app-step-indicator currentStep="finalizar"></app-step-indicator>
+
+  <!-- Conteúdo principal com layout de duas colunas -->
+  <div class="finalizar-content">
+    
+    <!-- Coluna Esquerda -->
+    <div class="left-column">
+      
+      <!-- Seção: Seus Dados -->
+      <div class="section-card" *ngIf="userData">
+        <h2 class="section-title">SEUS DADOS</h2>
+        <div class="user-info">
+          <div class="info-item">
+            <span class="label">Nome:</span>
+            <span class="value">{{ userData.nome }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Telefone:</span>
+            <span class="value">{{ userData.telefone }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">E-mail:</span>
+            <span class="value">{{ userData.email }}</span>
+          </div>
+          <div class="info-item" *ngIf="userData.mensagem">
+            <span class="label">Mensagem:</span>
+            <span class="value">{{ userData.mensagem }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção: Links das Lojas -->
+      <div class="section-card" *ngIf="product && product.linkLojas && product.linkLojas.length > 0">
+        <h2 class="section-title">LINK DAS LOJAS</h2>
+        <div class="links-list">
+          <div *ngFor="let link of product.linkLojas" class="link-item">
+            <div class="link-info">
+              <span class="store-name">{{ link.nomeLoja }}</span>
+              <span class="link-url">{{ link.linkProduto }}</span>
+            </div>
+            <button class="copy-button" (click)="copyLink(link.linkProduto)">
+              <span class="copy-icon">📋</span>
+              Copiar Link
+            </button>
+          </div>
+        </div>
+        
+        <!-- Confirmação dentro do card -->
+        <div class="confirmation-section">
+          <div class="confirmation-checkbox">
+            <input 
+              type="checkbox" 
+              id="confirmReservation" 
+              [(ngModel)]="confirmReservation"
+              class="checkbox-input"
+            >
+            <label for="confirmReservation" class="checkbox-label">
+              Confirmo que li e aceito os termos de reserva
+            </label>
+          </div>
+          
+          <!-- Mensagem de erro -->
+          <div *ngIf="cardErro" class="error-message">
+            <span class="error-icon">⚠️</span>
+            Erro ao finalizar reserva. Tente novamente.
+          </div>
+          
+          <button 
+            class="btn btn-success finalize-button" 
+            (click)="finalizeReservation()"
+            [disabled]="!confirmReservation">
+            Finalizar Reserva
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna Direita -->
+    <div class="right-column">
+      
+      <!-- Seção: Produto Selecionado -->
+      <div class="product-section" *ngIf="product">
+        <h2 class="section-title">Produto selecionado</h2>
+        
+        <div class="product-content">
+          <!-- Foto do Produto -->
+          <div class="product-image-container">
+            <img [src]="product.imageUrl" [alt]="product.imageAlt" class="product-image">
+          </div>
+          
+          <!-- Detalhes do Produto -->
+          <div class="product-details">
+            <h3 class="product-name">{{ product.titulo }}</h3>
+            <p class="product-description">{{ product.descricao }}</p>
+            <p class="product-price">Valor médio: R$ {{ (product.valor || 0) / 100 | currency:'BRL':'symbol':'1.2-2' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botões de Navegação -->
+  <div class="navigation-buttons">
+    <button class="btn btn-secondary" (click)="goBack()">
+      Voltar
+    </button>
+    
+    <button class="btn btn-primary" (click)="goToHome()">
+      Home
+    </button>
+  </div>
+</div>

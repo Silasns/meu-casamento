@@ -7,9 +7,9 @@ export interface Product {
     titulo: string,
     descricao: string,
     valor: number,
-    statusRevervado: boolean,
+    statusReservado: boolean,
     disponivel: boolean,
-    linksLoja: LinksLoja[],
+    linkLojas: LinksLoja[],
     imageUrl: string,
     imageAlt: string
 }
