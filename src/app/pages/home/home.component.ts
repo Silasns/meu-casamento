@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { PaymentFlowService } from '../../services/payment-flow.service';
 import { ProductStorageService } from '../../services/product-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,17 +12,56 @@ import { ProductStorageService } from '../../services/product-storage.service';
 export class HomeComponent implements OnInit {
   products: any = [];
   showWelcomeModal: boolean = true;
+  
+  // Valores para contribuições
+  valorNoivos: string = '';
+  
+  // Erros de validação
+  valorNoivosError: boolean = false;
 
   constructor(
     private productService: ProductsService,
     private paymentFlow: PaymentFlowService,
-    private paymentStorage: ProductStorageService
+    private paymentStorage: ProductStorageService,
+    private router: Router
   ){}
 
   ngOnInit(): void {
+    this.scrollToTop();
     this.paymentStorage.clear()
     this.paymentFlow.clear();
     this.getProdutcs();
+    
+    
+    // Configurar botão "Voltar ao topo"
+    this.setupBackToTopButton();
+    
+    // Garantir que sempre vá para o topo em qualquer navegação
+    this.setupScrollToTopOnNavigation();
+  }
+
+  setupScrollToTopOnNavigation() {
+    // Ir para o topo quando a página for carregada
+    window.addEventListener('load', () => {
+      this.scrollToTop();
+    });
+    
+    // Ir para o topo quando houver mudança de rota
+    window.addEventListener('popstate', () => {
+      this.scrollToTop();
+    });
+  }
+
+  setupBackToTopButton() {
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton?.classList.add('show');
+      } else {
+        backToTopButton?.classList.remove('show');
+      }
+    });
   }
 
   closeWelcomeModal(): void {
@@ -42,5 +82,78 @@ export class HomeComponent implements OnInit {
       error: (err) => {
       }
     })
+  }
+
+  // Métodos para inputs de moeda
+  onValorNoivosChange(event: any): void {
+    const value = event.target.value;
+    this.valorNoivos = this.formatCurrency(value);
+    this.valorNoivosError = false;
+  }
+
+
+  formatCurrency(value: string): string {
+    // Remove tudo que não é número
+    const numbers = value.replace(/\D/g, '');
+    
+    if (numbers === '') return '';
+    
+    // Converte para centavos e formata
+    const amount = parseInt(numbers);
+    const formatted = (amount / 100).toFixed(2).replace('.', ',');
+    
+    return formatted;
+  }
+
+  // Método para permitir apenas números
+  onKeyPress(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Permitir apenas números (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  validateValorNoivos(): void {
+    const numericValue = this.getNumericValue(this.valorNoivos);
+    this.valorNoivosError = numericValue < 5.00;
+  }
+
+  getNumericValue(formattedValue: string): number {
+    if (!formattedValue) return 0;
+    return parseFloat(formattedValue.replace(',', '.'));
+  }
+
+  // Métodos para enviar contribuições
+  enviarValorNoivos(): void {
+    const numericValue = this.getNumericValue(this.valorNoivos);
+    if (numericValue >= 5.00) {
+      console.log('Enviando valor para noivos:', numericValue);
+      this.router.navigate(['/checkout'], { 
+        queryParams: { 
+          tipo: 'noivos',
+          valor: numericValue * 100 // Convertendo para centavos
+        } 
+      });
+    } else {
+      this.valorNoivosError = true;
+    }
+  }
+
+
+  scrollToTop() {
+    // Garantir que a página vá para o topo imediatamente
+    window.scrollTo(0, 0);
+    
+    // Também usar scroll suave para casos onde há navegação
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
   }
 }

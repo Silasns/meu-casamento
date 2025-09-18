@@ -13,6 +13,7 @@ export class ProductStorageService {
   private readonly USER_KEY = 'userData';
   private readonly PAYMENT_METHOD_KEY = 'paymentMethod';
   private readonly RESERVATION_COMPLETED_KEY = 'reservationCompleted';
+  private readonly CONTRIBUTION_KEY = 'contributionData';
   private readonly TIMESTAMP_KEY = 'storageTimestamp';
   
   // Tempo máximo para manter dados (30 minutos)
@@ -153,6 +154,26 @@ export class ProductStorageService {
     }
   }
 
+  setContributionData(contributionData: { tipo: string, valor: number }): void {
+    try {
+      sessionStorage.setItem(this.CONTRIBUTION_KEY, JSON.stringify(contributionData));
+      sessionStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
+      console.log('Dados de contribuição salvos:', contributionData);
+    } catch (error) {
+      console.error('Erro ao salvar dados de contribuição:', error);
+    }
+  }
+
+  getContributionData(): { tipo: string, valor: number } | null {
+    try {
+      const stored = sessionStorage.getItem(this.CONTRIBUTION_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch (error) {
+      console.error('Erro ao recuperar dados de contribuição:', error);
+      return null;
+    }
+  }
+
   clear(): void {
     try {
       // Limpar sessionStorage
@@ -160,6 +181,7 @@ export class ProductStorageService {
       sessionStorage.removeItem(this.USER_KEY);
       sessionStorage.removeItem(this.PAYMENT_METHOD_KEY);
       sessionStorage.removeItem(this.RESERVATION_COMPLETED_KEY);
+      sessionStorage.removeItem(this.CONTRIBUTION_KEY);
       sessionStorage.removeItem(this.TIMESTAMP_KEY);
 
       // Limpar BehaviorSubjects
@@ -186,6 +208,7 @@ export class ProductStorageService {
     console.log('Usuário:', this.getCurrentUser());
     console.log('Método de Pagamento:', this.getPaymentMethod());
     console.log('Reserva Concluída:', this.getReservationCompleted());
+    console.log('Dados de Contribuição:', this.getContributionData());
     console.log('Timestamp:', sessionStorage.getItem(this.TIMESTAMP_KEY));
     console.log('=============================');
   }
