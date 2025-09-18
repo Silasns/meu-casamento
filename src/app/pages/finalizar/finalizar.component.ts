@@ -7,6 +7,7 @@ import { UserModel } from '../../models/user.model';
 import { ProductsService } from '../../services/products.service';
 import { VincularUsuarioRequestModel } from '../../models/vincular-usuario-request.model';
 import { ProductLinkRequest } from '../../models/product-link-request.model';
+import { ValidationService } from '../../services/validation.service';
 
 @Component({
   selector: 'app-finalizar',
@@ -30,7 +31,8 @@ export class FinalizarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private storageService: ProductStorageService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private validationService: ValidationService
   ) {
     this.product$ = this.storageService.product$;
     this.userInfo$ = this.storageService.userInfo$;
@@ -97,9 +99,51 @@ export class FinalizarComponent implements OnInit {
     if (!this.product || !this.userData) return;
     
     this.isLoadingPayment = true;
+    this.cardErro = false;
+    
+    // Validar disponibilidade do produto antes de gerar link
+    this.validarDisponibilidadeProduto().then(isAvailable => {
+      if (!isAvailable) {
+        this.isLoadingPayment = false;
+        this.cardErro = true;
+        console.error('Produto não está mais disponível');
+        return;
+      }
+      
+      // Produto disponível, gerar link de pagamento
+      this.gerarLinkPagamentoSeguro();
+    }).catch(error => {
+      console.error('Erro ao validar disponibilidade:', error);
+      this.isLoadingPayment = false;
+      this.cardErro = true;
+    });
+  }
+
+  private validarDisponibilidadeProduto(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (!this.product) {
+        reject(new Error('Produto não encontrado'));
+        return;
+      }
+      
+      this.validationService.validateProductAvailability(this.product.id).subscribe({
+        next: (isAvailable) => {
+          console.log(`Produto ${this.product?.id} disponível:`, isAvailable);
+          resolve(isAvailable);
+        },
+        error: (error) => {
+          console.error('Erro ao validar disponibilidade:', error);
+          reject(error);
+        }
+      });
+    });
+  }
+
+  private gerarLinkPagamentoSeguro() {
+    if (!this.product || !this.userData) return;
     
     const request: ProductLinkRequest = {
-      order_nsu: this.product.id,
+      order_nsu: this.validationService.generateUniqueTransactionId(`produto_${this.product.id}`),
       customer: {
         name: this.userData.nome,
         email: this.userData.email,
@@ -114,7 +158,7 @@ export class FinalizarComponent implements OnInit {
       ],
     };
     
-    console.log('Gerando link de pagamento:', request);
+    console.log('Gerando link de pagamento seguro:', request);
     
     this.productsService.getLinkPagamento(request).subscribe({
       next: (response) => {
@@ -134,6 +178,7 @@ export class FinalizarComponent implements OnInit {
     if (!this.userData) return;
     
     this.isLoadingPayment = true;
+    this.cardErro = false;
     
     // Buscar dados de contribuição do storage
     const contributionData = this.storageService.getContributionData();
@@ -146,7 +191,7 @@ export class FinalizarComponent implements OnInit {
     }
     
     const request: ProductLinkRequest = {
-      order_nsu: `contribuicao_${contributionData.tipo}_${Date.now()}`, // ID único para contribuição
+      order_nsu: this.validationService.generateUniqueTransactionId(`contribuicao_${contributionData.tipo}`),
       customer: {
         name: this.userData!.nome,
         email: this.userData!.email,
@@ -260,7 +305,11 @@ export class FinalizarComponent implements OnInit {
   }
 
   goToPayment(url: string) {
-    if (!this.isSafeExternalUrl(url)) return;
+    if (!this.validationService.validateSafeUrl(url)) {
+      console.error('URL não é segura para redirecionamento:', url);
+      this.cardErro = true;
+      return;
+    }
     // Carregar na mesma janela ao invés de abrir nova aba
     window.location.href = url;
   }
@@ -282,6 +331,25 @@ export class FinalizarComponent implements OnInit {
       return;
     }
 
+    // Validar disponibilidade antes de finalizar reserva
+    this.validarDisponibilidadeProduto().then(isAvailable => {
+      if (!isAvailable) {
+        this.cardErro = true;
+        console.error('Produto não está mais disponível para reserva');
+        return;
+      }
+      
+      // Produto disponível, prosseguir com a reserva
+      this.processarReservaProduto();
+    }).catch(error => {
+      console.error('Erro ao validar disponibilidade:', error);
+      this.cardErro = true;
+    });
+  }
+
+  private processarReservaProduto() {
+    if (!this.product || !this.userData) return;
+
     const request: VincularUsuarioRequestModel = {
       nome: this.userData.nome,
       telefone: this.userData.telefone,
@@ -291,22 +359,22 @@ export class FinalizarComponent implements OnInit {
       meioReserva: this.method
     };
 
-    console.log('Enviando requisição:', request);
+    console.log('Enviando requisição de reserva:', request);
 
-        this.productsService.postVinculaProdutoUsuario(request).subscribe({
-          next: (response) => {
-            console.log('Reserva realizada com sucesso:', response);
-            // Marcar reserva como concluída antes de navegar
-            this.storageService.setReservationCompleted(true);
-            // Limpar dados após reserva bem-sucedida
-            this.storageService.clearAfterReservation();
-            this.router.navigate(['/conclusao']);
-          },
-          error: (error) => {
-            console.error('Erro ao realizar reserva:', error);
-            this.cardErro = true;
-          }
-        });
+    this.productsService.postVinculaProdutoUsuario(request).subscribe({
+      next: (response) => {
+        console.log('Reserva realizada com sucesso:', response);
+        // Marcar reserva como concluída antes de navegar
+        this.storageService.setReservationCompleted(true);
+        // Limpar dados após reserva bem-sucedida
+        this.storageService.clearAfterReservation();
+        this.router.navigate(['/conclusao']);
+      },
+      error: (error) => {
+        console.error('Erro ao realizar reserva:', error);
+        this.cardErro = true;
+      }
+    });
   }
 
   getContributionValue(): number {
