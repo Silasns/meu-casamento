@@ -31,8 +31,8 @@
         </div>
       </div>
 
-      <!-- Seção: Links das Lojas -->
-      <div class="section-card" *ngIf="product && product.linkLojas && product.linkLojas.length > 0">
+      <!-- Seção: Links das Lojas (apenas para link_loja) -->
+      <div class="section-card" *ngIf="paymentMethod === 'link_loja' && product && product.linkLojas && product.linkLojas.length > 0">
         <h2 class="section-title">LINK DAS LOJAS</h2>
         <div class="links-list">
           <div *ngFor="let link of product.linkLojas" class="link-item">
@@ -75,11 +75,129 @@
           </button>
         </div>
       </div>
+
+      <!-- Seção: Contribuição Direta (apenas para contribuicao_direta) -->
+      <div class="section-card" *ngIf="paymentMethod === 'contribuicao_direta'">
+        <h2 class="section-title">CONTRIBUIÇÃO DIRETA</h2>
+        
+        <!-- Loading section -->
+        <div class="loading-section" *ngIf="isLoadingPayment">
+          <div class="loading-spinner"></div>
+          <p>Gerando link de pagamento...</p>
+        </div>
+        
+        <!-- Payment section -->
+        <div class="payment-section" *ngIf="!isLoadingPayment && urlPagamento">
+          <div class="payment-info">
+            <div class="payment-header">
+              <span class="payment-icon">💳</span>
+              <span class="payment-title">Link de Pagamento Seguro</span>
+            </div>
+            <p class="payment-description">
+              Sua contribuição será processada de forma segura através do nosso parceiro de pagamento.
+            </p>
+            <div class="security-badges">
+              <span class="badge">🔒 SSL</span>
+              <span class="badge">🛡️ Seguro</span>
+              <span class="badge">✅ Verificado</span>
+            </div>
+          </div>
+          
+          <!-- Mensagem de erro -->
+          <div *ngIf="cardErro" class="error-message">
+            <span class="error-icon">⚠️</span>
+            <div class="error-content">
+              <div class="error-text">
+                <h4>Erro ao gerar pagamento</h4>
+                <p>Ocorreu um problema ao gerar o link de pagamento. Tente novamente.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Botão de pagamento -->
+          <button 
+            class="payment-button"
+            (click)="finalizeReservation()"
+            [disabled]="isLoadingPayment">
+            <span class="btn-icon">💳</span>
+            Ir para Pagamento
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Seção: Pagamento Direto (apenas para pagar_noivos) -->
+      <div class="section-card" *ngIf="paymentMethod === 'pagar_noivos'">
+        <h2 class="section-title">PAGAMENTO DIRETO</h2>
+        
+        <!-- Loading do link de pagamento -->
+        <div *ngIf="isLoadingPayment" class="loading-section">
+          <div class="loading-spinner"></div>
+          <p>Gerando link de pagamento...</p>
+        </div>
+        
+        <!-- Link de pagamento gerado -->
+        <div *ngIf="!isLoadingPayment && urlPagamento" class="payment-section">
+          <div class="payment-info">
+            <div class="payment-header">
+              <span class="payment-icon">💳</span>
+              <span class="payment-title">Link de Pagamento Seguro</span>
+            </div>
+            <p class="payment-description">
+              Seu pagamento será processado de forma segura através do nosso parceiro de pagamento.
+            </p>
+            <div class="security-badges">
+              <span class="badge">🔒 SSL</span>
+              <span class="badge">🛡️ Seguro</span>
+              <span class="badge">✅ Verificado</span>
+            </div>
+          </div>
+          
+          <!-- Mensagem de erro -->
+          <div *ngIf="cardErro" class="error-message">
+            <span class="error-icon">⚠️</span>
+            <div class="error-text">
+              <h4>Erro ao processar reserva</h4>
+              <p>Ocorreu um erro ao salvar sua reserva. Tente novamente.</p>
+            </div>
+          </div>
+          
+          <button 
+            class="btn btn-primary payment-button" 
+            (click)="finalizeReservation()"
+            [disabled]="isLoadingPayment">
+            <span class="btn-icon" *ngIf="!isLoadingPayment">💳</span>
+            <span class="btn-spinner" *ngIf="isLoadingPayment">⏳</span>
+            <span *ngIf="!isLoadingPayment">Ir para Pagamento</span>
+            <span *ngIf="isLoadingPayment">Salvando...</span>
+            <span class="btn-arrow" *ngIf="!isLoadingPayment">→</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Coluna Direita -->
     <div class="right-column">
       
+      <!-- Seção: Contribuição Selecionada (apenas para contribuicao_direta) -->
+      <div class="contribution-section" *ngIf="paymentMethod === 'contribuicao_direta'">
+        <h2 class="section-title">Contribuição selecionada</h2>
+        
+        <div class="contribution-content">
+          <!-- Ícone da Contribuição -->
+          <div class="contribution-icon-container">
+            <span class="contribution-icon">💝</span>
+          </div>
+          
+          <!-- Detalhes da Contribuição -->
+          <div class="contribution-details">
+            <h3 class="contribution-name">Contribuição para o Enxoval</h3>
+            <p class="contribution-description">Sua contribuição ajudará os noivos a montar seu novo lar</p>
+            <p class="contribution-price">Valor: R$ {{ getContributionValue() | currency:'BRL':'symbol':'1.2-2' }}</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Seção: Produto Selecionado -->
       <div class="product-section" *ngIf="product">
         <h2 class="section-title">Produto selecionado</h2>

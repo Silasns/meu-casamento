@@ -5,11 +5,6 @@ import { ProductStorageService } from '../../services/product-storage.service';
 import { Observable } from 'rxjs';
 import { UserModel } from '../../models/user.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductsService } from '../../services/products.service';
-import { ProductLinkRequest } from '../../models/product-link-request.model';
-import { NbDialogService } from '@nebular/theme';
-import { ModalPagamentoComponent } from '../../components/modal-pagamento/modal-pagamento.component';
-import { VincularUsuarioRequestModel } from '../../models/vincular-usuario-request.model';
 
 @Component({
   selector: 'app-checkout',
@@ -19,7 +14,6 @@ import { VincularUsuarioRequestModel } from '../../models/vincular-usuario-reque
 export class CheckoutComponent implements OnInit {
   product: Product | null = null;
   paymentMethod: string = '';
-  urlPagamento: string = '';
   
   readonly product$: Observable<Product | null>;
   readonly userInfo$: Observable<UserModel | null>;
@@ -30,9 +24,7 @@ export class CheckoutComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private storageService: ProductStorageService,
-    private fb: FormBuilder,
-    private productsService: ProductsService,
-    private dialogService: NbDialogService
+    private fb: FormBuilder
   ) {
     this.product$ = this.storageService.product$;
     this.userInfo$ = this.storageService.userInfo$;
@@ -49,6 +41,26 @@ export class CheckoutComponent implements OnInit {
   ngOnInit() {
     console.log('Checkout ngOnInit iniciado');
     
+    // Verificar parâmetros de query para contribuições diretas
+    this.route.queryParams.subscribe(params => {
+      if (params['tipo'] && params['valor']) {
+        console.log('Contribuição direta detectada:', params);
+        this.paymentMethod = 'contribuicao_direta';
+        
+        // Salvar dados de contribuição no storage
+        const contributionData = {
+          tipo: params['tipo'],
+          valor: parseInt(params['valor'])
+        };
+        this.storageService.setContributionData(contributionData);
+        this.storageService.setPaymentMethod('contribuicao_direta');
+        
+        console.log('Dados de contribuição salvos:', contributionData);
+        // Não precisa de produto para contribuições diretas
+        return;
+      }
+    });
+    
     // Verificar se já temos produto no storage
     const currentProduct = this.storageService.getCurrentProduct();
     const currentPaymentMethod = this.storageService.getPaymentMethod();
@@ -58,8 +70,8 @@ export class CheckoutComponent implements OnInit {
       this.paymentMethod = currentPaymentMethod;
       console.log('Produto carregado do storage:', this.product);
       console.log('Método de pagamento:', this.paymentMethod);
-    } else {
-      // Se não tem produto, aguardar um pouco e verificar novamente
+    } else if (this.paymentMethod !== 'contribuicao_direta') {
+      // Se não tem produto e não é contribuição direta, aguardar um pouco e verificar novamente
       setTimeout(() => {
         const productAfterDelay = this.storageService.getCurrentProduct();
         if (!productAfterDelay) {
@@ -89,86 +101,18 @@ export class CheckoutComponent implements OnInit {
       this.storageService.setUser(this.form.value);
       console.log('Dados salvos no storage:', this.form.value);
       
-      if (this.paymentMethod === 'link_loja') {
-        // Navegar para página de finalização
-        this.router.navigate(['/finalizar']);
-      } else if (this.paymentMethod === 'pagar_noivos') {
-        // Montar link de pagamento com os dados do formulário e mostrar modal
-        this.montarLinkPagamento();
+      // Salvar método de pagamento se for contribuição direta
+      if (this.paymentMethod === 'contribuicao_direta') {
+        this.storageService.setPaymentMethod('contribuicao_direta');
       }
+      
+      // Navegar para página de finalização em ambos os casos
+      this.router.navigate(['/finalizar']);
     }
   }
 
   goBack() {
     console.log('Voltando para home');
     this.router.navigate(['/']);
-  }
-
-  montarLinkPagamento() {
-    if (!this.product) return;
-    
-    const request: ProductLinkRequest = {
-      order_nsu: this.product.id,
-      customer: {
-        name: this.form.get('nome')?.value || '',
-        email: this.form.get('email')?.value || '',
-        phone_number: this.form.get('telefone')?.value || ''
-      },
-      items: [
-        {
-          quantity: 1,
-          price: this.product.valor,
-          description: this.product.descricao
-        }
-      ],
-    };
-    
-    console.log('Gerando link de pagamento:', request);
-    
-    this.productsService.getLinkPagamento(request).subscribe({
-      next: (response) => {
-        this.urlPagamento = response.url;
-        console.log('Link de pagamento gerado:', this.urlPagamento);
-        // Mostrar modal após gerar o link
-        this.showPaymentModal();
-      },
-      error: (error) => {
-        console.error('Erro ao gerar link de pagamento:', error);
-        alert('Erro ao gerar link de pagamento. Tente novamente.');
-      }
-    });
-  }
-
-  showPaymentModal() {
-    this.dialogService.open(ModalPagamentoComponent, {
-      hasScroll: false,
-      dialogClass: 'modal-size',
-      context: {
-        urlPagamento: this.urlPagamento,
-        product: this.product,
-        userData: this.form.value
-      }
-    }).onClose.subscribe(confirmed => {
-      if (confirmed) {
-        this.goToPaymentNewTab(this.urlPagamento);
-      }
-    });
-  }
-
-  goToPaymentNewTab(url: string) {
-    if (!this.isSafeExternalUrl(url)) return;
-    // Carregar na mesma janela ao invés de abrir nova aba
-    window.location.href = url;
-  }
-
-  private isSafeExternalUrl(url: string): boolean {
-    try {
-      const u = new URL(url);
-      // só permita https e, se quiser, restrinja os domínios:
-      const allowedHosts = ['checkout.infinitepay.io'];
-      return u.protocol === 'https:' && allowedHosts.includes(u.host);
-    } catch {
-      return false;
-    }
   }
 }

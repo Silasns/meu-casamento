@@ -1,16 +1,111 @@
 
 
+<!-- Menu de Navegação -->
+<nav class="main-navigation" id="mainNav">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <img src="/logo_ss.ico" alt="Silas & Sofia" class="nav-logo">
+    </div>
+    <ul class="nav-menu">
+      <li><a href="#home" class="nav-link">Início</a></li>
+      <li><a href="#contributions" class="nav-link">Contribuições</a></li>
+      <li><a href="#presents" class="nav-link">Lista de Presentes</a></li>
+    </ul>
+  </div>
+</nav>
+
 <!-- Seção Hero -->
-<section class="hero-section">
+<section class="hero-section" id="home">
   <div class="hero-image-container">
     <img src="/images/silasol.jpg" alt="Silas e Sofia" class="hero-image">
     <div class="hero-overlay">
       <h1 class="hero-title">Silas e Sofia</h1>
       <p class="hero-subtitle">Construindo nosso lar com amor</p>
     </div>
+    <!-- Indicador de scroll -->
+    <div class="scroll-indicator">
+      <div class="scroll-arrow">
+        <span>↓</span>
+        <p>Role para ver mais</p>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- Seção de Contribuições -->
+<section class="contributions-section" >
+  <div class="container">
+    <!-- Título da seção -->
+    <div class="section-header">
+      <h2 class="section-title">Contribua com nosso casamento</h2>
+      <p class="section-subtitle">Escolha como deseja nos ajudar neste momento especial</p>
+    </div>
+    
+    <div class="row gx-4 gy-4">
+      <!-- Card 1: Enviar valor para os noivos -->
+      <div class="col-12 col-md-8 col-lg-6 mx-auto">
+        <div class="contribution-card card-enxoval">
+          <div class="card-header">
+            <h3 class="card-title">💝 Enviar um valor para os noivos</h3>
+            <p class="card-subtitle">Contribua com qualquer valor para nosso enxoval</p>
+          </div>
+          <div class="card-body">
+            <div class="input-group">
+              <span class="input-prefix">R$</span>
+              <input 
+                type="text" 
+                class="currency-input" 
+                placeholder="0,00"
+                [(ngModel)]="valorNoivos"
+                (input)="onValorNoivosChange($event)"
+                (blur)="validateValorNoivos()"
+                (keypress)="onKeyPress($event)">
+            </div>
+            <div *ngIf="valorNoivosError" class="error-message">
+              Valor mínimo é de R$ 5,00
+            </div>
+            <button 
+              class="btn btn-primary contribution-btn"
+              (click)="enviarValorNoivos()"
+              [disabled]="!valorNoivos || getNumericValue(valorNoivos) < 5.00 || valorNoivosError">
+              <span class="btn-icon">💳</span>
+              Contribuir
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="presents"></div>
+</section >
+
+<!-- Seção de Presentes -->
+<section class="presents-section" >
+  <div class="container">
+    <!-- Título da seção de presentes -->
+    <div class="section-header">
+      <h2 class="section-title presents-title">Nossa Lista de Presentes</h2>
+      <p class="section-subtitle">Escolha um presente especial para nosso lar</p>
+    </div>
+    
+    <div class="row gx-4 gy-4">
+        @for (product of products; track product) {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <app-card-presente
+                [product]="product"
+                >
+                </app-card-presente>
+            </div>
+        }
+    </div>
+  </div>
+</section>
+
+<!-- Botão Voltar ao Topo -->
+<button class="back-to-top" id="backToTop" (click)="scrollToTop()">
+  <span>↑</span>
+</button>
 
 <!-- Modal de Boas-vindas -->
 <div *ngIf="showWelcomeModal" class="modal-overlay" (click)="onBackdropClick($event)">
@@ -53,19 +148,5 @@
       </button>
     </div>
   </div>
-</div>
-
-
-<div class="container py-4">
-    <div class="row gx-4 gy-4">
-        @for (product of products; track product) {
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <app-card-presente
-                [product]="product"
-                >
-                </app-card-presente>
-            </div>
-        }
-    </div>
 </div>
 
