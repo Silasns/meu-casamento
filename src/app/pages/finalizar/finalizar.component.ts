@@ -294,7 +294,7 @@ export class FinalizarComponent implements OnInit {
         // Limpar dados após pagamento bem-sucedido
         this.storageService.clearAfterPayment();
         // Após salvar a reserva, redirecionar para pagamento
-        //this.goToPayment(this.urlPagamento);
+        this.goToPayment(this.urlPagamento);
       },
       error: (error) => {
         console.error('Erro ao salvar reserva:', error);
