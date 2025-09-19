@@ -64,7 +64,14 @@
           <!-- Mensagem de erro -->
           <div *ngIf="cardErro" class="error-message">
             <span class="error-icon">⚠️</span>
-            Erro ao finalizar reserva. Tente novamente.
+            <div class="error-content">
+              <div class="error-text">
+                <h4 *ngIf="produtoIndisponivel">Produto já foi reservado</h4>
+                <h4 *ngIf="!produtoIndisponivel">Erro ao finalizar reserva</h4>
+                <p *ngIf="produtoIndisponivel">Este produto já foi reservado por outro convidado. Escolha outro presente.</p>
+                <p *ngIf="!produtoIndisponivel">Ocorreu um erro ao finalizar a reserva. Tente novamente.</p>
+              </div>
+            </div>
           </div>
           
           <button 
@@ -108,8 +115,10 @@
             <span class="error-icon">⚠️</span>
             <div class="error-content">
               <div class="error-text">
-                <h4>Erro ao gerar pagamento</h4>
-                <p>Ocorreu um problema ao gerar o link de pagamento. Tente novamente.</p>
+                <h4 *ngIf="produtoIndisponivel">Produto já foi reservado</h4>
+                <h4 *ngIf="!produtoIndisponivel">Erro ao gerar pagamento</h4>
+                <p *ngIf="produtoIndisponivel">Este produto já foi reservado por outro convidado. Escolha outro presente.</p>
+                <p *ngIf="!produtoIndisponivel">Ocorreu um problema ao gerar o link de pagamento. Tente novamente.</p>
               </div>
             </div>
           </div>
@@ -157,8 +166,10 @@
           <div *ngIf="cardErro" class="error-message">
             <span class="error-icon">⚠️</span>
             <div class="error-text">
-              <h4>Erro ao processar reserva</h4>
-              <p>Ocorreu um erro ao salvar sua reserva. Tente novamente.</p>
+              <h4 *ngIf="produtoIndisponivel">Produto já foi reservado</h4>
+              <h4 *ngIf="!produtoIndisponivel">Erro ao processar reserva</h4>
+              <p *ngIf="produtoIndisponivel">Este produto já foi reservado por outro convidado. Escolha outro presente.</p>
+              <p *ngIf="!produtoIndisponivel">Ocorreu um erro ao salvar sua reserva. Tente novamente.</p>
             </div>
           </div>
           

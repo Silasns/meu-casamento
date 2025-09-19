@@ -20,6 +20,7 @@ export class FinalizarComponent implements OnInit {
   paymentMethod: string = '';
   confirmReservation = false;
   cardErro = false;
+  produtoIndisponivel = false;
   method = 'lojas'; // Método para reserva via lojas (igual ao usado na confirmação)
   urlPagamento: string = '';
   isLoadingPayment = false;
@@ -111,29 +112,26 @@ export class FinalizarComponent implements OnInit {
 
   private validarDisponibilidadeProduto(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      /*
       if (!this.product) {
         reject(new Error('Produto não encontrado'));
         return;
       }
-      */
-      // Temporariamente sempre retornar true para resolver problemas
-      // TODO: Implementar validação real quando necessário
-      //resolve(true);
-      const id: string = this.product?.id ? '' : '';
       
+      const id: string = this.product.id;
+
       this.validationService.validateProductAvailability(id).subscribe({
         next: (isAvailable) => {
-          console.log(`Produto ${this.product?.id} disponível:`, isAvailable);
           resolve(isAvailable);
         },
         error: (error) => {
           console.error('Erro ao validar disponibilidade:', error);
+          // Em caso de erro na API, também considerar como produto indisponível
+          this.cardErro = true;
+          this.produtoIndisponivel = true;
+          this.isLoadingPayment = false;
           resolve(false);
-          reject(new Error('Produto não encontrado'));
         }
       });
-      
     });
   }
 
