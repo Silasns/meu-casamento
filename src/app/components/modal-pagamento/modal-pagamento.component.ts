@@ -54,11 +54,8 @@ export class ModalPagamentoComponent {
       meioReserva: 'pagamentoDireto' // Valor correto do enum do backend
     };
 
-    console.log('Salvando reserva no banco:', request);
-
     this.productsService.postVinculaProdutoUsuario(request).subscribe({
       next: (response) => {
-        console.log('Reserva salva com sucesso:', response);
         this.isLoading = false;
         // Limpar dados após pagamento bem-sucedido
         this.storageService.clearAfterPayment();
@@ -66,7 +63,6 @@ export class ModalPagamentoComponent {
         this.dialogRef.close(true);
       },
       error: (error) => {
-        console.error('Erro ao salvar reserva:', error);
         this.isLoading = false;
         this.cardErro = true;
       }

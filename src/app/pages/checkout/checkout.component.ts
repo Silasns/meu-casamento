@@ -38,13 +38,10 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    console.log('Checkout ngOnInit iniciado');
-    
+  ngOnInit() {    
     // Verificar parâmetros de query para contribuições diretas
     this.route.queryParams.subscribe(params => {
       if (params['tipo'] && params['valor']) {
-        console.log('Contribuição direta detectada:', params);
         this.paymentMethod = 'contribuicao_direta';
         
         // Salvar dados de contribuição no storage
@@ -54,8 +51,6 @@ export class CheckoutComponent implements OnInit {
         };
         this.storageService.setContributionData(contributionData);
         this.storageService.setPaymentMethod('contribuicao_direta');
-        
-        console.log('Dados de contribuição salvos:', contributionData);
         // Não precisa de produto para contribuições diretas
         return;
       }
@@ -68,20 +63,15 @@ export class CheckoutComponent implements OnInit {
     if (currentProduct) {
       this.product = currentProduct;
       this.paymentMethod = currentPaymentMethod;
-      console.log('Produto carregado do storage:', this.product);
-      console.log('Método de pagamento:', this.paymentMethod);
     } else if (this.paymentMethod !== 'contribuicao_direta') {
       // Se não tem produto e não é contribuição direta, aguardar um pouco e verificar novamente
       setTimeout(() => {
         const productAfterDelay = this.storageService.getCurrentProduct();
         if (!productAfterDelay) {
-          console.log('Nenhum produto encontrado após delay, redirecionando para home');
           this.router.navigate(['/']);
         } else {
           this.product = productAfterDelay;
           this.paymentMethod = this.storageService.getPaymentMethod();
-          console.log('Produto carregado após delay:', this.product);
-          console.log('Método de pagamento:', this.paymentMethod);
         }
       }, 1000);
     }
@@ -90,7 +80,6 @@ export class CheckoutComponent implements OnInit {
     const currentUser = this.storageService.getCurrentUser();
     if (currentUser) {
       this.form.patchValue(currentUser);
-      console.log('Dados do usuário carregados:', currentUser);
     }
   }
 
@@ -99,7 +88,6 @@ export class CheckoutComponent implements OnInit {
     if (this.form.valid) {
       // Salvar dados do usuário no service
       this.storageService.setUser(this.form.value);
-      console.log('Dados salvos no storage:', this.form.value);
       
       // Salvar método de pagamento se for contribuição direta
       if (this.paymentMethod === 'contribuicao_direta') {
@@ -112,7 +100,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   goBack() {
-    console.log('Voltando para home');
     this.router.navigate(['/']);
   }
 }

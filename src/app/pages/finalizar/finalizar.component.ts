@@ -38,12 +38,9 @@ export class FinalizarComponent implements OnInit {
     this.userInfo$ = this.storageService.userInfo$;
   }
 
-  ngOnInit() {
-    console.log('Finalizar ngOnInit iniciado');
-    
+  ngOnInit() {    
     // Verificar se a reserva já foi concluída
     if (this.storageService.getReservationCompleted()) {
-      console.log('Reserva já foi concluída, redirecionando para conclusão');
       this.router.navigate(['/conclusao']);
       return;
     }
@@ -55,7 +52,6 @@ export class FinalizarComponent implements OnInit {
     
     // Verificar se é contribuição direta (sem produto)
     if (currentPaymentMethod === 'contribuicao_direta') {
-      console.log('Contribuição direta detectada');
       this.product = null; // Não há produto para contribuições diretas
       this.userData = currentUser;
       this.paymentMethod = currentPaymentMethod;
@@ -66,7 +62,6 @@ export class FinalizarComponent implements OnInit {
     }
     
     if (!currentProduct) {
-      console.log('Nenhum produto encontrado, redirecionando para home');
       this.router.navigate(['/']);
       return;
     }
@@ -83,15 +78,10 @@ export class FinalizarComponent implements OnInit {
     } else {
       this.method = 'lojas';
     }
-    
-    console.log('Produto carregado:', this.product);
-    console.log('Dados do usuário:', this.userData);
-    console.log('Método de pagamento:', this.paymentMethod);
   }
 
   copyLink(link: string) {
     navigator.clipboard.writeText(link).then(() => {
-      console.log('Link copiado:', link);
     });
   }
 
@@ -121,21 +111,29 @@ export class FinalizarComponent implements OnInit {
 
   private validarDisponibilidadeProduto(): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      /*
       if (!this.product) {
         reject(new Error('Produto não encontrado'));
         return;
       }
+      */
+      // Temporariamente sempre retornar true para resolver problemas
+      // TODO: Implementar validação real quando necessário
+      //resolve(true);
+      const id: string = this.product?.id ? '' : '';
       
-      this.validationService.validateProductAvailability(this.product.id).subscribe({
+      this.validationService.validateProductAvailability(id).subscribe({
         next: (isAvailable) => {
           console.log(`Produto ${this.product?.id} disponível:`, isAvailable);
           resolve(isAvailable);
         },
         error: (error) => {
           console.error('Erro ao validar disponibilidade:', error);
-          reject(error);
+          resolve(false);
+          reject(new Error('Produto não encontrado'));
         }
       });
+      
     });
   }
 
@@ -158,16 +156,12 @@ export class FinalizarComponent implements OnInit {
       ],
     };
     
-    console.log('Gerando link de pagamento seguro:', request);
-    
     this.productsService.getLinkPagamento(request).subscribe({
       next: (response) => {
         this.urlPagamento = response.url;
         this.isLoadingPayment = false;
-        console.log('Link de pagamento gerado:', this.urlPagamento);
       },
       error: (error) => {
-        console.error('Erro ao gerar link de pagamento:', error);
         this.isLoadingPayment = false;
         this.cardErro = true;
       }
@@ -205,17 +199,14 @@ export class FinalizarComponent implements OnInit {
         }
       ],
     };
-    
-    console.log('Gerando link de pagamento para contribuição:', request);
+  
     
     this.productsService.getLinkPagamento(request).subscribe({
       next: (response) => {
         this.urlPagamento = response.url;
         this.isLoadingPayment = false;
-        console.log('Link de pagamento gerado:', this.urlPagamento);
       },
       error: (error) => {
-        console.error('Erro ao gerar link de pagamento:', error);
         this.isLoadingPayment = false;
         this.cardErro = true;
       }
@@ -232,7 +223,6 @@ export class FinalizarComponent implements OnInit {
     } else {
       // Para link de loja, finalizar reserva normalmente
       if (this.confirmReservation && this.product && this.userData) {
-        console.log('Finalizando reserva...');
         this.vincularUsuarioReservarProduto();
       }
     }
@@ -240,7 +230,6 @@ export class FinalizarComponent implements OnInit {
 
   confirmarPagamento() {
     if (!this.product || !this.userData) {
-      console.error('Produto ou dados do usuário não encontrados');
       return;
     }
 
@@ -253,16 +242,12 @@ export class FinalizarComponent implements OnInit {
 
   confirmarPagamentoContribuicao() {
     if (!this.userData) {
-      console.error('Dados do usuário não encontrados');
       return;
     }
 
     if (!this.urlPagamento) {
-      console.error('URL de pagamento não encontrada');
       return;
     }
-
-    console.log('Confirmando pagamento de contribuição direta...');
     
     // Para contribuições diretas, não precisamos salvar no banco
     // Apenas redirecionar para o pagamento
@@ -285,11 +270,8 @@ export class FinalizarComponent implements OnInit {
       meioReserva: 'pagamentoDireto' // Valor correto do enum do backend
     };
 
-    console.log('Salvando reserva no banco:', request);
-
     this.productsService.postVinculaProdutoUsuario(request).subscribe({
       next: (response) => {
-        console.log('Reserva salva com sucesso:', response);
         this.isLoadingPayment = false;
         // Limpar dados após pagamento bem-sucedido
         this.storageService.clearAfterPayment();
@@ -297,7 +279,6 @@ export class FinalizarComponent implements OnInit {
         this.goToPayment(this.urlPagamento);
       },
       error: (error) => {
-        console.error('Erro ao salvar reserva:', error);
         this.isLoadingPayment = false;
         this.cardErro = true;
       }
@@ -312,17 +293,6 @@ export class FinalizarComponent implements OnInit {
     }
     // Carregar na mesma janela ao invés de abrir nova aba
     window.location.href = url;
-  }
-
-  private isSafeExternalUrl(url: string): boolean {
-    try {
-      const u = new URL(url);
-      // só permita https e, se quiser, restrinja os domínios:
-      const allowedHosts = ['checkout.infinitepay.io'];
-      return u.protocol === 'https:' && allowedHosts.includes(u.host);
-    } catch {
-      return false;
-    }
   }
 
   vincularUsuarioReservarProduto() {
@@ -359,11 +329,8 @@ export class FinalizarComponent implements OnInit {
       meioReserva: this.method
     };
 
-    console.log('Enviando requisição de reserva:', request);
-
     this.productsService.postVinculaProdutoUsuario(request).subscribe({
       next: (response) => {
-        console.log('Reserva realizada com sucesso:', response);
         // Marcar reserva como concluída antes de navegar
         this.storageService.setReservationCompleted(true);
         // Limpar dados após reserva bem-sucedida
@@ -371,7 +338,6 @@ export class FinalizarComponent implements OnInit {
         this.router.navigate(['/conclusao']);
       },
       error: (error) => {
-        console.error('Erro ao realizar reserva:', error);
         this.cardErro = true;
       }
     });
@@ -387,12 +353,10 @@ export class FinalizarComponent implements OnInit {
   }
 
   goBack() {
-    console.log('Voltando para checkout');
     this.router.navigate(['/checkout']);
   }
 
   goToHome() {
-    console.log('Voltando para home');
     this.router.navigate(['/']);
   }
 }

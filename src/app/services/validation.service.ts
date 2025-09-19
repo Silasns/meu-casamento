@@ -18,16 +18,9 @@ export class ValidationService {
   validateProductAvailability(productId: string): Observable<boolean> {
     // TODO: Implementar chamada real para API de validação
     // Por enquanto, simular validação
-    return of(true).pipe(
-      map(() => {
-        console.log(`Validando disponibilidade do produto ${productId}`);
-        // Simular delay de rede
-        return true;
-      }),
-      catchError(error => {
-        console.error('Erro ao validar disponibilidade:', error);
-        return of(false);
-      })
+    return this.productsService.getDisponibilidadeProduto(productId).pipe(
+        map((response) => response),
+        catchError((error) => of(false))
     );
   }
 
@@ -69,15 +62,35 @@ export class ValidationService {
   validateSafeUrl(url: string): boolean {
     try {
       const urlObj = new URL(url);
-      // Permitir apenas HTTPS em produção
+      // Permitir HTTPS e HTTP para desenvolvimento
       if (urlObj.protocol !== 'https:' && urlObj.protocol !== 'http:') {
         return false;
       }
+      
       // Validar domínios permitidos (ajustar conforme necessário)
-      const allowedDomains = ['localhost', '127.0.0.1', 'seu-dominio.com'];
+      const allowedDomains = [
+        'localhost', 
+        '127.0.0.1', 
+        'checkout.infinitepay.io', // Domínio do gateway de pagamento
+        'infinitepay.io',
+        'silas-nc', // Subdomínio específico do projeto
+        'seu-dominio.com'
+      ];
+      
       const hostname = urlObj.hostname;
-      return allowedDomains.some(domain => hostname.includes(domain));
-    } catch {
+      
+      // Verificar se o hostname contém algum dos domínios permitidos
+      const isAllowed = allowedDomains.some(domain => {
+        const result = hostname.includes(domain);
+        return result;
+      });
+      
+      // Validação específica para InfinitePay (qualquer subdomínio)
+      const isInfinitePay = hostname.endsWith('.infinitepay.io') || hostname === 'infinitepay.io';
+      
+      const finalResult = isAllowed || isInfinitePay;
+      return finalResult;
+    } catch (error) {
       return false;
     }
   }

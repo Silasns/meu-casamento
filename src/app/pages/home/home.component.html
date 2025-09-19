@@ -7,9 +7,9 @@
       <img src="/logo_ss.ico" alt="Silas & Sofia" class="nav-logo">
     </div>
     <ul class="nav-menu">
-      <li><a href="#home" class="nav-link">Início</a></li>
-      <li><a href="#contributions" class="nav-link">Contribuições</a></li>
-      <li><a href="#presents" class="nav-link">Lista de Presentes</a></li>
+      <li><a (click)="scrollToSection('home')" class="nav-link">Início</a></li>
+      <li><a (click)="scrollToSection('contributions')" class="nav-link">Contribuições</a></li>
+      <li><a (click)="scrollToSection('presents')" class="nav-link">Lista de Presentes</a></li>
     </ul>
   </div>
 </nav>
@@ -33,7 +33,7 @@
 </section>
 
 <!-- Seção de Contribuições -->
-<section class="contributions-section" >
+<section class="contributions-section" id="contributions">
   <div class="container">
     <!-- Título da seção -->
     <div class="section-header">
