@@ -96,7 +96,6 @@ export class ConfirmacaoComponent implements OnInit {
     const metodo = this.method;
     if (this.method === "card") {
       this.goToPaymentNewTab(this.urlPagamento);
-      console.log("Metodo pagamento1: ", this.method);
     } else if(this.method === "lojas") {
        this.vincularUsuarioReservarProduto();
     }
@@ -145,13 +144,11 @@ export class ConfirmacaoComponent implements OnInit {
   }
 
   goToConfirmacao() {
-    console.log('go to conclusao')
     this.router.navigate(['/conclusao']);
   }
 
   atualizarReservaProduto() {
     const request = {"reservado": true}
-    console.log("Id: ", this.productValue.id)
     this.productsService.patchProduto(this.productValue.id, request).subscribe({
       next: (response) => {
         this.goToConfirmacao();

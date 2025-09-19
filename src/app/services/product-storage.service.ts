@@ -61,7 +61,6 @@ export class ProductStorageService {
 
         // Se os dados são mais antigos que o tempo máximo, limpar
         if (timeDiff > this.MAX_STORAGE_TIME) {
-          console.log('Dados antigos detectados, limpando sessionStorage...');
           this.clear();
           return;
         }
@@ -78,9 +77,7 @@ export class ProductStorageService {
       sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
       sessionStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
       this.userInfo.next(user);
-      console.log('Dados do usuário salvos no sessionStorage:', user);
     } catch (error) {
-      console.error('Erro ao salvar dados do usuário:', error);
     }
   }
 
@@ -89,9 +86,7 @@ export class ProductStorageService {
       sessionStorage.setItem(this.PRODUCT_KEY, JSON.stringify(product));
       sessionStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
       this.productSubject.next(product);
-      console.log('Produto salvo no sessionStorage:', product);
     } catch (error) {
-      console.error('Erro ao salvar produto:', error);
     }
   }
 
@@ -119,9 +114,7 @@ export class ProductStorageService {
     try {
       sessionStorage.setItem(this.RESERVATION_COMPLETED_KEY, JSON.stringify(completed));
       this.reservationCompleted.next(completed);
-      console.log('Status de reserva salvo:', completed);
     } catch (error) {
-      console.error('Erro ao salvar status de reserva:', error);
     }
   }
 
@@ -139,9 +132,7 @@ export class ProductStorageService {
     try {
       sessionStorage.setItem(this.PAYMENT_METHOD_KEY, method);
       this.paymentMethod.next(method);
-      console.log('Método de pagamento salvo:', method);
     } catch (error) {
-      console.error('Erro ao salvar método de pagamento:', error);
     }
   }
 
@@ -158,9 +149,7 @@ export class ProductStorageService {
     try {
       sessionStorage.setItem(this.CONTRIBUTION_KEY, JSON.stringify(contributionData));
       sessionStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
-      console.log('Dados de contribuição salvos:', contributionData);
     } catch (error) {
-      console.error('Erro ao salvar dados de contribuição:', error);
     }
   }
 
@@ -169,7 +158,6 @@ export class ProductStorageService {
       const stored = sessionStorage.getItem(this.CONTRIBUTION_KEY);
       return stored ? JSON.parse(stored) : null;
     } catch (error) {
-      console.error('Erro ao recuperar dados de contribuição:', error);
       return null;
     }
   }
@@ -190,9 +178,7 @@ export class ProductStorageService {
       this.reservationCompleted.next(false);
       this.paymentMethod.next('');
 
-      console.log('Todos os dados foram limpos do sessionStorage');
     } catch (error) {
-      console.error('Erro ao limpar dados:', error);
     }
   }
 
@@ -215,13 +201,11 @@ export class ProductStorageService {
 
   // Método para limpar dados após conclusão da reserva
   clearAfterReservation(): void {
-    console.log('Limpeza automática após conclusão da reserva');
     this.clear();
   }
 
   // Método para limpar dados após pagamento
   clearAfterPayment(): void {
-    console.log('Limpeza automática após pagamento');
     this.clear();
   }
 
@@ -237,7 +221,6 @@ export class ProductStorageService {
       
       return timeDiff <= this.MAX_STORAGE_TIME;
     } catch (error) {
-      console.error('Erro ao verificar validade dos dados:', error);
       return false;
     }
   }

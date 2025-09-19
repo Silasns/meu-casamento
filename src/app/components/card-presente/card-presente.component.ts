@@ -33,7 +33,6 @@ export class CardPresenteComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.product.statusReservado) {
-      console.log("statusReservado: ", this.product.statusReservado)
     }
   }
 
@@ -47,20 +46,14 @@ export class CardPresenteComponent implements OnInit {
     }
     ).onClose.subscribe(data => {
       if(data){
-        console.log('Método selecionado:', data.method);
-        console.log('Produto:', data.product);
-        
         if (data.method === 'link_loja') {
           // Salvar produto no storage antes de navegar
-          console.log('Salvando produto no storage:', data.product);
           this.storageService.setProduct(data.product);
           this.storageService.setPaymentMethod('link_loja');
-          console.log('Produto salvo, navegando para checkout');
           // Navegar para checkout quando selecionar "Pegar link da loja"
           this.router.navigate(['/checkout']);
         } else if (data.method === 'pagar_noivos') {
           // Salvar produto e método de pagamento
-          console.log('Salvando produto e método de pagamento direto aos noivos');
           this.storageService.setProduct(data.product);
           this.storageService.setPaymentMethod('pagar_noivos');
           this.router.navigate(['/checkout']);

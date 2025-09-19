@@ -32,4 +32,8 @@ export class ProductsService {
   postVinculaProdutoUsuario(request: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/usuarios/reservar`, request);
   }
+
+  getDisponibilidadeProduto(id: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/produtos/${id}`);
+  }
 }

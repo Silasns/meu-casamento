@@ -130,7 +130,6 @@ export class HomeComponent implements OnInit {
   enviarValorNoivos(): void {
     const numericValue = this.getNumericValue(this.valorNoivos);
     if (numericValue >= 5.00) {
-      console.log('Enviando valor para noivos:', numericValue);
       this.router.navigate(['/checkout'], { 
         queryParams: { 
           tipo: 'noivos',
@@ -155,5 +154,15 @@ export class HomeComponent implements OnInit {
         behavior: 'smooth'
       });
     }, 100);
+  }
+
+  scrollToSection(sectionId: string) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   }
 }
