@@ -149,7 +149,7 @@ export class FinalizarComponent implements OnInit {
         {
           quantity: 1,
           price: this.product.valor,
-          description: this.product.descricao
+          description: this.product.titulo
         }
       ],
     };
