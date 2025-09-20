@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.scrollToTop();
+    // Ir para o topo imediatamente ao carregar a página
+    window.scrollTo(0, 0);
     this.paymentStorage.clear()
     this.paymentFlow.clear();
     this.getProdutcs();
@@ -43,12 +44,12 @@ export class HomeComponent implements OnInit {
   setupScrollToTopOnNavigation() {
     // Ir para o topo quando a página for carregada
     window.addEventListener('load', () => {
-      this.scrollToTop();
+      window.scrollTo(0, 0);
     });
     
     // Ir para o topo quando houver mudança de rota
     window.addEventListener('popstate', () => {
-      this.scrollToTop();
+      window.scrollTo(0, 0);
     });
   }
 
@@ -143,17 +144,17 @@ export class HomeComponent implements OnInit {
 
 
   scrollToTop() {
-    // Garantir que a página vá para o topo imediatamente
-    window.scrollTo(0, 0);
+    // Scroll suave e gradual para o topo (apenas quando chamado pelo botão)
+    const scrollToTop = () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 0) {
+        window.scrollTo(0, currentScroll - currentScroll / 8);
+        requestAnimationFrame(scrollToTop);
+      }
+    };
     
-    // Também usar scroll suave para casos onde há navegação
-    setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
-    }, 100);
+    // Iniciar o scroll suave
+    requestAnimationFrame(scrollToTop);
   }
 
   scrollToSection(sectionId: string) {
