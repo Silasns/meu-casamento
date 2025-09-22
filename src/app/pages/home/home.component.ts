@@ -90,9 +90,18 @@ export class HomeComponent implements OnInit {
     return formatted;
   }
 
-  // Método para permitir apenas números
+  // Método para permitir apenas números e detectar Enter
   onKeyPress(event: KeyboardEvent): boolean {
     const charCode = event.which ? event.which : event.keyCode;
+    
+    // Se for Enter (código 13)
+    if (charCode === 13) {
+      event.preventDefault();
+      // Executar a mesma lógica do botão contribuir
+      this.enviarValorNoivos();
+      return false;
+    }
+    
     // Permitir apenas números (0-9)
     if (charCode < 48 || charCode > 57) {
       event.preventDefault();
