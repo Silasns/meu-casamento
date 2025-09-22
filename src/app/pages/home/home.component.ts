@@ -33,24 +33,8 @@ export class HomeComponent implements OnInit {
     this.paymentFlow.clear();
     this.getProdutcs();
     
-    
     // Configurar botão "Voltar ao topo"
     this.setupBackToTopButton();
-    
-    // Garantir que sempre vá para o topo em qualquer navegação
-    this.setupScrollToTopOnNavigation();
-  }
-
-  setupScrollToTopOnNavigation() {
-    // Ir para o topo quando a página for carregada
-    window.addEventListener('load', () => {
-      window.scrollTo(0, 0);
-    });
-    
-    // Ir para o topo quando houver mudança de rota
-    window.addEventListener('popstate', () => {
-      window.scrollTo(0, 0);
-    });
   }
 
   setupBackToTopButton() {
@@ -144,17 +128,10 @@ export class HomeComponent implements OnInit {
 
 
   scrollToTop() {
-    // Scroll suave e gradual para o topo (apenas quando chamado pelo botão)
-    const scrollToTop = () => {
-      const currentScroll = window.pageYOffset;
-      if (currentScroll > 0) {
-        window.scrollTo(0, currentScroll - currentScroll / 8);
-        requestAnimationFrame(scrollToTop);
-      }
-    };
-    
-    // Iniciar o scroll suave
-    requestAnimationFrame(scrollToTop);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   scrollToSection(sectionId: string) {
