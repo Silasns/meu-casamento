@@ -119,6 +119,11 @@
                 <h4 *ngIf="!produtoIndisponivel">Erro ao gerar pagamento</h4>
                 <p *ngIf="produtoIndisponivel">Este produto já foi reservado por outro convidado. Escolha outro presente.</p>
                 <p *ngIf="!produtoIndisponivel">Ocorreu um problema ao gerar o link de pagamento. Tente novamente.</p>
+                
+                <!-- Botão para voltar à lista quando produto indisponível -->
+                <button *ngIf="produtoIndisponivel" class="btn btn-primary" (click)="goToHome()" style="margin-top: 15px;">
+                  <span>🎁</span> Ver outros presentes
+                </button>
               </div>
             </div>
           </div>
@@ -170,6 +175,11 @@
               <h4 *ngIf="!produtoIndisponivel">Erro ao processar reserva</h4>
               <p *ngIf="produtoIndisponivel">Este produto já foi reservado por outro convidado. Escolha outro presente.</p>
               <p *ngIf="!produtoIndisponivel">Ocorreu um erro ao salvar sua reserva. Tente novamente.</p>
+              
+              <!-- Botão para voltar à lista quando produto indisponível -->
+              <button *ngIf="produtoIndisponivel" class="btn btn-primary" (click)="goToHome()" style="margin-top: 15px;">
+                <span>🎁</span> Ver outros presentes
+              </button>
             </div>
           </div>
           

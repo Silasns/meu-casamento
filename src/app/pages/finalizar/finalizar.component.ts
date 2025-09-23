@@ -89,14 +89,15 @@ export class FinalizarComponent implements OnInit {
   gerarLinkPagamento() {
     if (!this.product || !this.userData) return;
     
+    this.resetErrorFlags();
     this.isLoadingPayment = true;
-    this.cardErro = false;
     
     // Validar disponibilidade do produto antes de gerar link
     this.validarDisponibilidadeProduto().then(isAvailable => {
       if (!isAvailable) {
         this.isLoadingPayment = false;
         this.cardErro = true;
+        this.produtoIndisponivel = true;
         console.error('Produto não está mais disponível');
         return;
       }
@@ -107,6 +108,7 @@ export class FinalizarComponent implements OnInit {
       console.error('Erro ao validar disponibilidade:', error);
       this.isLoadingPayment = false;
       this.cardErro = true;
+      this.produtoIndisponivel = true;
     });
   }
 
@@ -139,7 +141,7 @@ export class FinalizarComponent implements OnInit {
     if (!this.product || !this.userData) return;
     
     const request: ProductLinkRequest = {
-      order_nsu: this.validationService.generateUniqueTransactionId(`produto_${this.product.id}`),
+      order_nsu: this.validationService.generateUniqueTransactionId(`${this.product.id}`),
       customer: {
         name: this.userData.nome,
         email: this.userData.email,
@@ -303,6 +305,7 @@ export class FinalizarComponent implements OnInit {
     this.validarDisponibilidadeProduto().then(isAvailable => {
       if (!isAvailable) {
         this.cardErro = true;
+        this.produtoIndisponivel = true;
         console.error('Produto não está mais disponível para reserva');
         return;
       }
@@ -312,6 +315,7 @@ export class FinalizarComponent implements OnInit {
     }).catch(error => {
       console.error('Erro ao validar disponibilidade:', error);
       this.cardErro = true;
+      this.produtoIndisponivel = true;
     });
   }
 
@@ -356,5 +360,11 @@ export class FinalizarComponent implements OnInit {
 
   goToHome() {
     this.router.navigate(['/']);
+  }
+
+  // Método para resetar flags de erro antes de novas tentativas
+  private resetErrorFlags(): void {
+    this.cardErro = false;
+    this.produtoIndisponivel = false;
   }
 }
