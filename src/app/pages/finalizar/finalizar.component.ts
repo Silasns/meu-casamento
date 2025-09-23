@@ -24,6 +24,7 @@ export class FinalizarComponent implements OnInit {
   method = 'lojas'; // Método para reserva via lojas (igual ao usado na confirmação)
   urlPagamento: string = '';
   isLoadingPayment = false;
+  linkCopied: { [key: string]: boolean } = {};
   
   readonly product$: Observable<Product | null>;
   readonly userInfo$: Observable<UserModel | null>;
@@ -83,6 +84,10 @@ export class FinalizarComponent implements OnInit {
 
   copyLink(link: string) {
     navigator.clipboard.writeText(link).then(() => {
+      this.linkCopied[link] = true;
+      setTimeout(() => {
+        this.linkCopied[link] = false;
+      }, 2000); // O estado de "copiado" volta ao normal após 2 segundos
     });
   }
 
