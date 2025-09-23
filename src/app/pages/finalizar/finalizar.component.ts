@@ -141,7 +141,7 @@ export class FinalizarComponent implements OnInit {
     if (!this.product || !this.userData) return;
     
     const request: ProductLinkRequest = {
-      order_nsu: this.validationService.generateUniqueTransactionId(`${this.product.id}`),
+      order_nsu: this.product.id,
       customer: {
         name: this.userData.nome,
         email: this.userData.email,
