@@ -298,6 +298,11 @@
   box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
 }
 
+.copy-button.copied {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  cursor: default;
+}
+
 /* Seção do Produto */
 .product-section {
   background: white;
@@ -424,6 +429,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+  width: 90%;
 }
 
 .finalize-button:hover:not(:disabled) {
@@ -477,6 +483,15 @@
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.payment-button-custom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  font-size: 1.1em;
 }
 
 /* Responsivo */
@@ -574,5 +589,9 @@
   
   .btn {
     width: 200px;
+  }
+
+  .payment-button, .payment-button-custom, .finalize-button {
+    width: 100%;
   }
 }

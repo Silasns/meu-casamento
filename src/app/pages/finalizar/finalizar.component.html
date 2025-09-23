@@ -40,9 +40,15 @@
               <span class="store-name">{{ link.nomeLoja }}</span>
               <span class="link-url">{{ link.linkProduto }}</span>
             </div>
-            <button class="copy-button" (click)="copyLink(link.linkProduto)">
-              <span class="copy-icon">📋</span>
-              Copiar Link
+            <button class="copy-button" (click)="copyLink(link.linkProduto)" [class.copied]="linkCopied[link.linkProduto]">
+              <span *ngIf="!linkCopied[link.linkProduto]">
+                <span class="copy-icon">📋</span>
+                Copiar Link
+              </span>
+              <span *ngIf="linkCopied[link.linkProduto]">
+                <span class="copy-icon">✅</span>
+                Copiado!
+              </span>
             </button>
           </div>
         </div>
@@ -129,14 +135,15 @@
           </div>
           
           <!-- Botão de pagamento -->
-          <button 
-            class="payment-button"
+            <button 
+            class="payment-button btn btn-primary w-100 payment-button-custom"
             (click)="finalizeReservation()"
             [disabled]="isLoadingPayment">
             <span class="btn-icon">💳</span>
-            Ir para Pagamento
+            <span *ngIf="!isLoadingPayment">Ir para Pagamento</span>
+            <span *ngIf="isLoadingPayment">Salvando...</span>
             <span class="btn-arrow">→</span>
-          </button>
+            </button>
         </div>
       </div>
 
